@@ -20,7 +20,7 @@ object FormMain: TFormMain
     Top = 0
     Width = 624
     Height = 441
-    ActivePage = TabSheet4
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     TabOrder = 0
@@ -157,6 +157,7 @@ object FormMain: TFormMain
               FieldName = 'PROJECTNAME'
               Footers = <>
               Title.Caption = #1055#1088#1086#1077#1082#1090
+              Visible = False
               Width = 30
             end>
           object RowDetailData: TRowDetailPanelControlEh
@@ -184,6 +185,7 @@ object FormMain: TFormMain
               LookupParams.LookupDataSet = dmOutlay.IBRequest
               LookupParams.LookupKeyFieldNames = 'ID'
               Title.Caption = #1047#1072#1087#1088#1086#1089
+              Visible = False
               Width = 80
             end
             item
@@ -194,6 +196,7 @@ object FormMain: TFormMain
               Footers = <>
               LookupParams.KeyFieldNames = 'PARTNAME'
               LookupParams.LookupDataSet = dmOutlay.IBPart
+              LookupParams.LookupDisplayFieldName = 'NAME'
               LookupParams.LookupKeyFieldNames = 'NAME'
               Title.Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
               Width = 153

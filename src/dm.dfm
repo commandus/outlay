@@ -844,6 +844,8 @@ object dmOutlay: TdmOutlay
       '  ID = :OLD_ID')
     ParamCheck = True
     UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PART_ID'
     Active = True
     Left = 568
     Top = 64
@@ -1363,31 +1365,36 @@ object dmOutlay: TdmOutlay
   object IBLProject: TIBDataSet
     Database = IBDatabase
     Transaction = IBTransaction
+    AfterInsert = IBLProjectAfterInsert
     BufferChunks = 1000
     CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from PROJECT'
       'where'
-      '  NAME = :OLD_NAME')
+      '  NAME = :OLD_NAME and'
+      '  SELLERORG = :OLD_SELLERORG and'
+      '  DESCRIPTION = :OLD_DESCRIPTION and'
+      '  VAT = :OLD_VAT and'
+      '  STAGE = :OLD_STAGE')
     InsertSQL.Strings = (
       'insert into PROJECT'
-      '  (NAME, SELLERORG, DESCRIPTION, CREATED, MODIFIED, VAT, STAGE)'
+      '  (NAME, SELLERORG, DESCRIPTION, VAT, STAGE)'
       'values'
-      
-        '  (:NAME, :SELLERORG, :DESCRIPTION, :CREATED, :MODIFIED, :VAT, :' +
-        'STAGE)')
+      '  (:NAME, :SELLERORG, :DESCRIPTION, :VAT, :STAGE)')
     RefreshSQL.Strings = (
       'Select '
       '  NAME,'
       '  SELLERORG,'
       '  DESCRIPTION,'
-      '  CREATED,'
-      '  MODIFIED,'
       '  VAT,'
       '  STAGE'
       'from PROJECT '
       'where'
-      '  NAME = :NAME')
+      '  NAME = :NAME and'
+      '  SELLERORG = :SELLERORG and'
+      '  DESCRIPTION = :DESCRIPTION and'
+      '  VAT = :VAT and'
+      '  STAGE = :STAGE')
     SelectSQL.Strings = (
       'select  NAME,SELLERORG,DESCRIPTION,CREATED,MODIFIED,VAT, STAGE '
       'from "PROJECT" where /*Filter*/ 1=1'
@@ -1398,12 +1405,14 @@ object dmOutlay: TdmOutlay
       '  NAME = :NAME,'
       '  SELLERORG = :SELLERORG,'
       '  DESCRIPTION = :DESCRIPTION,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED,'
       '  VAT = :VAT,'
       '  STAGE = :STAGE'
       'where'
-      '  NAME = :OLD_NAME')
+      '  NAME = :OLD_NAME and'
+      '  SELLERORG = :OLD_SELLERORG and'
+      '  DESCRIPTION = :OLD_DESCRIPTION and'
+      '  VAT = :OLD_VAT and'
+      '  STAGE = :OLD_STAGE')
     ParamCheck = True
     UniDirectional = False
     Active = True
@@ -1425,16 +1434,6 @@ object dmOutlay: TdmOutlay
       FieldName = 'DESCRIPTION'
       Origin = '"PROJECT"."DESCRIPTION"'
       Size = 4096
-    end
-    object DateTimeField1: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"PROJECT"."CREATED"'
-      Required = True
-    end
-    object DateTimeField2: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"PROJECT"."MODIFIED"'
-      Required = True
     end
     object LargeintField1: TLargeintField
       FieldName = 'VAT'
@@ -1572,6 +1571,7 @@ object dmOutlay: TdmOutlay
   object IBLSpecification: TIBDataSet
     Database = IBDatabase
     Transaction = IBTransaction
+    AfterInsert = IBLSpecificationAfterInsert
     BufferChunks = 1000
     CachedUpdates = False
     DeleteSQL.Strings = (
@@ -1583,12 +1583,12 @@ object dmOutlay: TdmOutlay
       
         '  (ID, REQUESTID, LINENO, PARTNAME, QTY, PRICEID, PRICE, DISCOUN' +
         'T, VAT, '
-      '   TAG, NOTES, CREATED, MODIFIED)'
+      '   TAG, NOTES)'
       'values'
       
         '  (:ID, :REQUESTID, :LINENO, :PARTNAME, :QTY, :PRICEID, :PRICE, ' +
         ':DISCOUNT, '
-      '   :VAT, :TAG, :NOTES, :CREATED, :MODIFIED)')
+      '   :VAT, :TAG, :NOTES)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1626,13 +1626,13 @@ object dmOutlay: TdmOutlay
       '  DISCOUNT = :DISCOUNT,'
       '  VAT = :VAT,'
       '  TAG = :TAG,'
-      '  NOTES = :NOTES,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED'
+      '  NOTES = :NOTES'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
     UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_SPECIFICATION_ID'
     Active = True
     DataSource = dslRequest
     Left = 680
@@ -1695,14 +1695,6 @@ object dmOutlay: TdmOutlay
       FieldName = 'NOTES'
       Origin = '"SPECIFICATION"."NOTES"'
       Size = 4096
-    end
-    object DateTimeField5: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"SPECIFICATION"."CREATED"'
-    end
-    object DateTimeField6: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"SPECIFICATION"."MODIFIED"'
     end
   end
   object dslSpecification: TDataSource

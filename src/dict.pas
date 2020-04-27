@@ -49,6 +49,12 @@ type
     DBNavigator7: TDBNavigator;
     DBGridEh8: TDBGridEh;
     DBNavigator8: TDBNavigator;
+    TabSheet11: TTabSheet;
+    DBGridEh5: TDBGridEh;
+    DBNavigator9: TDBNavigator;
+    TabSheet12: TTabSheet;
+    DBGridEh9: TDBGridEh;
+    DBNavigator10: TDBNavigator;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private

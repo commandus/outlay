@@ -20,7 +20,7 @@
     Top = 0
     Width = 624
     Height = 461
-    ActivePage = TabSheet1
+    ActivePage = TabSheet12
     Align = alClient
     MultiLine = True
     TabOrder = 0
@@ -920,6 +920,182 @@
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsVendor
+        Anchors = [akLeft, akBottom]
+        TabOrder = 1
+      end
+    end
+    object TabSheet11: TTabSheet
+      Caption = #1050#1072#1090'.'
+      ImageIndex = 12
+      ExplicitLeft = 8
+      ExplicitTop = 0
+      DesignSize = (
+        616
+        417)
+      object DBGridEh5: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 616
+        Height = 386
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ColumnDefValues.Title.TitleButton = True
+        DataSource = dmOutlay.dsCategory
+        DynProps = <>
+        OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+        TabOrder = 0
+        Columns = <
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Caption = #1050#1072#1090#1077#1075#1086#1088#1080#1103
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'DESCRIPTION'
+            Footers = <>
+            Title.Caption = #1054#1087#1080#1089#1072#1085#1080#1077
+            Width = 487
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+      object DBNavigator9: TDBNavigator
+        Left = 0
+        Top = 384
+        Width = 320
+        Height = 30
+        DataSource = dmOutlay.dsCategory
+        Anchors = [akLeft, akBottom]
+        TabOrder = 1
+      end
+    end
+    object TabSheet12: TTabSheet
+      Caption = #1058#1086#1074#1072#1088#1099
+      ImageIndex = 13
+      ExplicitLeft = 8
+      ExplicitTop = 0
+      DesignSize = (
+        616
+        417)
+      object DBGridEh9: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 616
+        Height = 386
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ColumnDefValues.Title.TitleButton = True
+        DataSource = dmOutlay.dsPart
+        DynProps = <>
+        OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+        TabOrder = 0
+        Columns = <
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'CATEGORY'
+            Footers = <>
+            LookupParams.KeyFieldNames = 'CATEGORY'
+            LookupParams.LookupDataSet = dmOutlay.IBCategory
+            LookupParams.LookupDisplayFieldName = 'NAME'
+            LookupParams.LookupKeyFieldNames = 'NAME'
+            Title.Caption = #1050#1072#1090#1077#1075#1086#1088#1080#1103
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'VENDOR'
+            Footers = <>
+            LookupParams.KeyFieldNames = 'VENDOR'
+            LookupParams.LookupDataSet = dmOutlay.IBVendor
+            LookupParams.LookupDisplayFieldName = 'NAME'
+            LookupParams.LookupKeyFieldNames = 'NAME'
+            Title.Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Caption = #1053#1072#1079#1074#1072#1085#1080#1077
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'DESCRIPTION'
+            Footers = <>
+            Title.Caption = #1054#1087#1080#1089#1072#1085#1080#1077
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'MEASUREUNIT'
+            Footers = <>
+            LookupParams.KeyFieldNames = 'MEASUREUNIT'
+            LookupParams.LookupDataSet = dmOutlay.IBMeasureUnit
+            LookupParams.LookupDisplayFieldName = 'NAME'
+            LookupParams.LookupKeyFieldNames = 'NAME'
+            Title.Caption = #1045#1076'.'#1080#1079#1084'.'
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'WEIGHT'
+            Footers = <>
+            Title.Caption = #1042#1077#1089
+            Width = 32
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'LENGTH'
+            Footers = <>
+            Title.Caption = #1044#1083#1080#1085#1072
+            Width = 32
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'WIDTH'
+            Footers = <>
+            Title.Caption = #1064#1080#1088#1080#1085#1072
+            Width = 32
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'HEIGHT'
+            Footers = <>
+            Title.Caption = #1042#1099#1089#1086#1090#1072
+            Width = 32
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+      object DBNavigator10: TDBNavigator
+        Left = 0
+        Top = 384
+        Width = 320
+        Height = 30
+        DataSource = dmOutlay.dsPart
         Anchors = [akLeft, akBottom]
         TabOrder = 1
       end

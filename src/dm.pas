@@ -145,8 +145,6 @@ type
     IBStringField1: TIBStringField;
     IBStringField2: TIBStringField;
     IBStringField3: TIBStringField;
-    DateTimeField1: TDateTimeField;
-    DateTimeField2: TDateTimeField;
     LargeintField1: TLargeintField;
     IBStringField4: TIBStringField;
     IBLRequest: TIBDataSet;
@@ -175,18 +173,23 @@ type
     FloatField4: TFloatField;
     IBStringField12: TIBStringField;
     IBStringField13: TIBStringField;
-    DateTimeField5: TDateTimeField;
-    DateTimeField6: TDateTimeField;
     dslSpecification: TDataSource;
     procedure DataModuleCreate(Sender: TObject);
     procedure dslRequestUpdateData(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
+    procedure IBLProjectAfterInsert(DataSet: TDataSet);
+    procedure IBLSpecificationAfterInsert(DataSet: TDataSet);
   private
     function getStyles: TStringList;
     function GetSelectedProjectName: String;
     function GetSelectedProjectVAT: Int64;
+    function GetSelectedRequestVAT: Int64;
     function GetSelectedRequestName: String;
     function GetSelectedSpecificationPartName: String;
+    function GetDefaultProjectSellerOrg(): String;
+    function GetDefaultProjectStage(): String;
+    function GetDefaultProjectVAT(): Int64;
+    function GetSelectedRequestId(): LongWord;
   public
     inifilename: String;
     style: String;
@@ -269,13 +272,31 @@ begin
   Result:= styles;
 end;
 
+procedure TdmOutlay.IBLProjectAfterInsert(DataSet: TDataSet);
+begin
+  if (DataSet.State in [dsEdit, dsInsert]) then
+  begin
+    DataSet.FieldByName('SELLERORG').AsString:= GetDefaultProjectSellerOrg();
+    DataSet.FieldByName('STAGE').AsString:= GetDefaultProjectStage();
+    DataSet.FieldByName('VAT').AsLargeInt:= GetDefaultProjectVAT();
+  end;
+end;
+
 procedure TdmOutlay.IBLRequestAfterInsert(DataSet: TDataSet);
 begin
   if (DataSet.State in [dsEdit, dsInsert]) then
   begin
     DataSet.FieldByName('PROJECTNAME').AsString:= GetSelectedProjectName();
     DataSet.FieldByName('VAT').AsLargeInt:= GetSelectedProjectVAT();
-    DataSet.Modified:= false;
+  end;
+end;
+
+procedure TdmOutlay.IBLSpecificationAfterInsert(DataSet: TDataSet);
+begin
+  if (DataSet.State in [dsEdit, dsInsert]) then
+  begin
+    DataSet.FieldByName('REQUESTID').AsLongWord:= GetSelectedRequestId();
+     DataSet.FieldByName('VAT').AsLargeInt:= GetSelectedRequestVAT();
   end;
 end;
 
@@ -350,6 +371,11 @@ end;
 
 function TdmOutlay.GetSelectedProjectVAT: Int64;
 begin
+  Result:= IBLProject.FieldByName('VAT').AsLargeInt;
+end;
+
+function TdmOutlay.GetSelectedRequestVAT: Int64;
+begin
   Result:= IBLRequest.FieldByName('VAT').AsLargeInt;
 end;
 
@@ -361,6 +387,26 @@ end;
 function TdmOutlay.GetSelectedSpecificationPartName: String;
 begin
   Result:= IBLSpecification.FieldByName('PARTNAME').AsString;
+end;
+
+function TdmOutlay.GetDefaultProjectSellerOrg(): String;
+begin
+  Result:= IBOrg.FieldByName('ORGNAME').AsString;
+end;
+
+function TdmOutlay.GetDefaultProjectStage(): String;
+begin
+  Result:= IBStage.FieldByName('NAME').AsString;
+end;
+
+function TdmOutlay.GetDefaultProjectVAT(): Int64;
+begin
+  Result:= IBVAT.FieldByName('VAL').AsLargeInt;
+end;
+
+function TdmOutlay.GetSelectedRequestId(): LongWord;
+begin
+  Result:= IBLRequest.FieldByName('ID').AsLongWord;
 end;
 
 end.
