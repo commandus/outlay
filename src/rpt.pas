@@ -122,7 +122,7 @@ function TFormReports.reportPdf(const reportName: String): AnsiString;
 begin
   reportFileName:= reportName + '.pdf';
   Result:= 'execute ibeblock as begin'#13#10 +
-  ' Params[''par1''] = '''';'#13#10 +
+  ' Params[''stage''] = ''Проект'';'#13#10 +
   ' SELECT SOURCE FROM fastreport where name = ''' + reportName + ''''#13#10 +
   ' into :RepSrc;'#13#10 +
   ' Report = ibec_CreateReport(RepSrc, Params, null);'#13#10 +
@@ -131,6 +131,11 @@ begin
   'end'#13#10;
   // FormReports.MemoErrors.Lines.Add(Result);
 end;
+
+{
+PropData Parameters Name="stage" DataType="ftString" Expression="[paramstage1]"
+0A506172616D657465727301010C3C000000204E616D653D227374616765222044617461547970653D226674537472696E67222045787072657373696F6E3D225B706172616D7374616765315D220000
+}
 
 procedure TFormReports.doReport();
 var
