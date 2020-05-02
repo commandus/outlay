@@ -49,6 +49,7 @@ type
     procedure RefreshData();
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuCancelClick(Sender: TObject);
+    procedure MenuReportClick(Sender: TObject);
   private
     procedure Rollback3();
     procedure Commit3();
@@ -93,6 +94,14 @@ end;
 procedure TFormMain.MenuOrgClick(Sender: TObject);
 begin
   ShowMyOrg();
+end;
+
+procedure TFormMain.MenuReportClick(Sender: TObject);
+begin
+
+  if FormReports = Nil then
+    FormReports:= TFormReports.Create(Self);
+  FormReports.Show();
 end;
 
 procedure TFormMain.MenuSaveClick(Sender: TObject);

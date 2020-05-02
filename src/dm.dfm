@@ -928,14 +928,9 @@ object dmOutlay: TdmOutlay
       '  ID = :OLD_ID')
     InsertSQL.Strings = (
       'insert into PRICE'
-      
-        '  (ID, PARTNAME, ORGNAME, CURRENCY, PRICE, CREATED, MODIFIED, SR' +
-        'C, NOTES)'
+      '  (ID, PARTNAME, ORGNAME, CURRENCY, PRICE, SRC, NOTES)'
       'values'
-      
-        '  (:ID, :PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :CREATED, :MODIF' +
-        'IED, :SRC, '
-      '   :NOTES)')
+      '  (:ID, :PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :SRC, :NOTES)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -963,14 +958,14 @@ object dmOutlay: TdmOutlay
       '  ORGNAME = :ORGNAME,'
       '  CURRENCY = :CURRENCY,'
       '  PRICE = :PRICE,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED,'
       '  SRC = :SRC,'
       '  NOTES = :NOTES'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
     UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PRICE_ID'
     Active = True
     Left = 624
     Top = 64
@@ -998,14 +993,6 @@ object dmOutlay: TdmOutlay
     object ibPricePRICE: TFloatField
       FieldName = 'PRICE'
       Origin = '"PRICE"."PRICE"'
-    end
-    object ibPriceCREATED: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"PRICE"."CREATED"'
-    end
-    object ibPriceMODIFIED: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"PRICE"."MODIFIED"'
     end
     object ibPriceSRC: TIBStringField
       FieldName = 'SRC'

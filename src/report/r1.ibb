@@ -1,0 +1,16 @@
+execute ibeblock
+as begin
+    Params['HeaderMemo'] = '';
+    Params['MEMO2'] = 2;
+
+    SELECT IBE$REPORT_SOURCE FROM ibe$reports
+    where ibe$report_id = 1
+    into :RepSrc;
+
+-- https://www.ibexpert.net/ibe/pmwiki.php?n=Doc.IbecExportReport
+-- __erXLS __erXML_XLS
+   Report = ibec_CreateReport(RepSrc, Params, null);
+-- Res = ibec_ExportReport(Report, 'r1.xls', __erXLS, 'AsText=FALSE;Wysiwyg=TRUE');
+   Res = ibec_ExportReport(Report, 'r1.xlsx', __erXML_XLS, 'Wysiwyg=TRUE');
+   Res = ibec_ExportReport(Report, 'r1.pdf', __erPDF, 'EmbeddedFonts=TRUE');
+end

@@ -99,8 +99,6 @@ type
     ibPriceORGNAME: TIBStringField;
     ibPriceCURRENCY: TIBStringField;
     ibPricePRICE: TFloatField;
-    ibPriceCREATED: TDateTimeField;
-    ibPriceMODIFIED: TDateTimeField;
     ibPriceSRC: TIBStringField;
     ibPriceNOTES: TIBStringField;
     dsPrice: TDataSource;
@@ -198,12 +196,13 @@ type
     hostAddress: String;
     userName: String;
     userPassword: String;
-    function connect: Boolean;
+    function connect(ibDatabase: TIBDatabase): Boolean;
     class procedure loadLastStyle();
     procedure setStyle(const style: String);
     function getStyleIndex: Integer;
     procedure loadSettings();
     procedure saveSettings();
+    function connectionString: AnsiString;
   end;
 
 var
@@ -219,7 +218,7 @@ procedure TdmOutlay.DataModuleCreate(Sender: TObject);
 begin
   inifilename:= ChangeFileExt(Application.ExeName, '.ini');
   loadSettings();
-  connect();
+  connect(IBDatabase);
 end;
 
 procedure TdmOutlay.dslRequestUpdateData(Sender: TObject);
@@ -235,11 +234,12 @@ end;
       + ';Password=' + userPassword;
 
 }
-function TdmOutlay.connect: Boolean;
+function TdmOutlay.connect(IBDatabase: TIBDatabase): Boolean;
 var
   c: Integer;
 begin
   IBDatabase.Connected:= False;
+  IBDatabase.DatabaseName:= hostAddress + ':' + dbName;
   with IBDatabase.Params do begin
     Clear;
     Add('lc_ctype=WIN1251');
@@ -257,6 +257,22 @@ begin
   finally
   end;
   Result:= IBDatabase.Connected;
+end;
+
+{
+  * db_name=localhost:c:\empty.fdb;
+  * password=masterkey;
+  * user_name=SYSDBA;
+  * lc_ctype=win1251;
+  * sql_role_name=ADMIN;
+  * sql_dialect=3;
+  * clientlib="c:\program files\firebird\bin\fbclient.dll"
+}
+function TdmOutlay.connectionString: AnsiString;
+begin
+  Result:= 'lc_ctype=WIN1251;user_name=' + userName
+    + ';password=' + userPassword
+    + ';db_name=' + hostAddress + ':' + dbName + ';';
 end;
 
 function TdmOutlay.getStyles: TStringList;

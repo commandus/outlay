@@ -47,7 +47,7 @@ end;
 procedure TFormSettings.BOKClick(Sender: TObject);
 begin
   save();
-  if not dm.dmOutlay.connect() then begin
+  if not dm.dmOutlay.connect(dm.dmOutlay.IBDatabase) then begin
     ShowMessage('Нет соединения с СУБД');
     Exit;
   end;

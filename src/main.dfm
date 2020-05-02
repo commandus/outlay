@@ -210,7 +210,7 @@ object FormMain: TFormMain
               LookupParams.KeyFieldNames = 'PRICEID'
               LookupParams.LookupDataSet = dmOutlay.ibPrice
               LookupParams.LookupKeyFieldNames = 'ID'
-              Title.Caption = #1062#1077#1085#1072' '#1082#1072#1090#1072#1083'.'
+              Title.Caption = #1055#1088#1072#1081#1089
               Width = 86
             end
             item
@@ -604,6 +604,7 @@ object FormMain: TFormMain
     end
     object MenuReport: TMenuItem
       Caption = '&'#1054#1090#1095#1077#1090#1099
+      OnClick = MenuReportClick
     end
     object MenuDict: TMenuItem
       Caption = '&'#1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
