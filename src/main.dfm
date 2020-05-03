@@ -582,8 +582,22 @@ object FormMain: TFormMain
     Top = 368
     object MenuSettings: TMenuItem
       Caption = '&'#1060#1072#1081#1083
+      object MenuReport: TMenuItem
+        Caption = '&'#1054#1090#1095#1077#1090#1099
+        ShortCut = 32850
+        OnClick = MenuReportClick
+      end
+      object MenuDict: TMenuItem
+        Caption = '&'#1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+        Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
+        ShortCut = 32836
+        OnClick = MenuDictClick
+      end
+      object MenuSep2: TMenuItem
+        Caption = '-'
+      end
       object MenuOrg: TMenuItem
-        Caption = '&'#1047#1072#1076#1072#1090#1100' '#1084#1086#1102' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1102
+        Caption = '&'#1052#1086#1103' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1103
         Hint = #1059#1082#1072#1079#1072#1090#1100' '#1084#1086#1102' '#1080' '#1089#1074#1103#1079#1072#1085#1099#1077' '#1089' '#1085#1077#1081' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080' ('#1087#1088#1086#1076#1072#1074#1094#1099')'
         ShortCut = 32845
         OnClick = MenuOrgClick
@@ -602,23 +616,13 @@ object FormMain: TFormMain
         OnClick = MenuExitClick
       end
     end
-    object MenuReport: TMenuItem
-      Caption = '&'#1054#1090#1095#1077#1090#1099
-      OnClick = MenuReportClick
-    end
-    object MenuDict: TMenuItem
-      Caption = '&'#1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
-      Hint = #1057#1087#1088#1072#1074#1086#1095#1085#1080#1082#1080
-      ShortCut = 32836
-      OnClick = MenuDictClick
-    end
     object MenuSave: TMenuItem
-      Caption = '&'#1057#1086#1093#1088#1072#1085#1080#1090#1100
+      Caption = '&'#1057#1086#1093#1088#1072#1085#1080#1090#1100' F5'
       ShortCut = 116
       OnClick = MenuSaveClick
     end
     object MenuCancel: TMenuItem
-      Caption = '&'#1054#1090#1084#1077#1085#1080#1090#1100
+      Caption = '&'#1054#1090#1084#1077#1085#1080#1090#1100' F4'
       ShortCut = 115
       OnClick = MenuCancelClick
     end

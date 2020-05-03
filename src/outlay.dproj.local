@@ -1,35 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.423,=D:\s\outlay\src\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.450,=D:\s\outlay\src\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.068,D:\s\outlay\src\Unit1.pas=D:\s\outlay\src\formoutlay.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.853,=D:\s\outlay\src\project.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.617,=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.221,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit2.pas=D:\s\outlay\src\main.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.572,D:\s\outlay\src\project.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.158,=D:\s\outlay\src\vat.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.448,=D:\s\outlay\src\myorg.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.221,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit2.dfm=D:\s\outlay\src\main.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.588,D:\s\outlay\src\vat.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.350,D:\s\outlay\src\Unit1.pas=D:\s\outlay\src\settings.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.350,D:\s\outlay\src\Unit1.dfm=D:\s\outlay\src\settings.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.535,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit4.dfm=D:\s\outlay\src\dm.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.535,D:\s\outlay\src\dm.pas=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.450,=D:\s\outlay\src\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.221,D:\s\outlay\src\main.pas=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.525,D:\s\outlay\src\orgposition.pas=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.865,=D:\s\outlay\src\org.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.455,D:\s\outlay\src\org.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.588,D:\s\outlay\src\vat.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.448,=D:\s\outlay\src\myorg.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.221,D:\s\outlay\src\main.dfm=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.158,=D:\s\outlay\src\vat.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.423,=D:\s\outlay\src\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.572,D:\s\outlay\src\project.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.853,=D:\s\outlay\src\project.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.091,=D:\s\outlay\src\orgposition.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.845,=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.661,D:\s\outlay\src\rpt.dfm=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit3.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.350,D:\s\outlay\src\settings.dfm=D:\s\outlay\src\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.653,=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.291,=D:\s\outlay\src\orgtype.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.541,D:\s\outlay\src\orgtype.pas=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.094,=D:\s\outlay\src\dict.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.661,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit3.pas=D:\s\outlay\src\rpt.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.535,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit4.pas=D:\s\outlay\src\dm.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.653,=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.845,=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.557,D:\s\outlay\src\person.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.661,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit3.dfm=D:\s\outlay\src\rpt.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.455,D:\s\outlay\src\org.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.068,D:\s\outlay\src\formoutlay.pas=D:\s\outlay\src\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.661,D:\s\outlay\src\rpt.pas=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.350,D:\s\outlay\src\settings.pas=D:\s\outlay\src\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.211,=D:\s\outlay\src\person.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.447,C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Project2.dproj=D:\s\outlay\src\outlay.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.091,=D:\s\outlay\src\orgposition.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.525,D:\s\outlay\src\orgposition.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.535,D:\s\outlay\src\dm.dfm=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Unit4.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.447,D:\s\outlay\src\outlay.dproj=C:\Users\andrei\Documents\Embarcadero\Studio\Projects\Project2.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.557,D:\s\outlay\src\person.pas=</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="dict.pas"/>

@@ -38,6 +38,7 @@ type
     DBGridEh4: TDBGridEh;
     MenuSave: TMenuItem;
     MenuCancel: TMenuItem;
+    MenuSep2: TMenuItem;
     procedure ShowOptions();
     procedure ShowMyOrg();
     procedure ShowDict();
