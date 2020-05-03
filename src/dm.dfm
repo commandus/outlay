@@ -1061,14 +1061,14 @@ object dmOutlay: TdmOutlay
     InsertSQL.Strings = (
       'insert into SPECIFICATION'
       
-        '  (ID, REQUESTID, LINENO, PARTNAME, QTY, PRICEID, PRICE, DISCOUN' +
-        'T, VAT, '
-      '   TAG, NOTES, CREATED, MODIFIED)'
+        '  (REQUESTID, LINENO, PARTNAME, QTY, PRICEID, PRICE, DISCOUNT, V' +
+        'AT, TAG, '
+      '   NOTES)'
       'values'
       
-        '  (:ID, :REQUESTID, :LINENO, :PARTNAME, :QTY, :PRICEID, :PRICE, ' +
-        ':DISCOUNT, '
-      '   :VAT, :TAG, :NOTES, :CREATED, :MODIFIED)')
+        '  (:REQUESTID, :LINENO, :PARTNAME, :QTY, :PRICEID, :PRICE, :DISC' +
+        'OUNT, :VAT, '
+      '   :TAG, :NOTES)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1090,13 +1090,12 @@ object dmOutlay: TdmOutlay
       '  ID = :ID')
     SelectSQL.Strings = (
       
-        'select  ID,REQUESTID,LINENO,PARTNAME,QTY,PRICEID,PRICE,DISCOUNT,' +
-        'VAT,COST,TAG,NOTES,CREATED,MODIFIED'
-      'from SPECIFICATION')
+        'select COST, CREATED, DISCOUNT, ID, LINENO, MODIFIED, NOTES, PAR' +
+        'TNAME, PRICE, PRICEID, QTY, REQUESTID, TAG, VAT from SPECIFICATI' +
+        'ON')
     ModifySQL.Strings = (
       'update SPECIFICATION'
       'set'
-      '  ID = :ID,'
       '  REQUESTID = :REQUESTID,'
       '  LINENO = :LINENO,'
       '  PARTNAME = :PARTNAME,'
@@ -1106,13 +1105,13 @@ object dmOutlay: TdmOutlay
       '  DISCOUNT = :DISCOUNT,'
       '  VAT = :VAT,'
       '  TAG = :TAG,'
-      '  NOTES = :NOTES,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED'
+      '  NOTES = :NOTES'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
     UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_SPECIFICATION_ID'
     Left = 344
     Top = 192
     object IBSpecificationID: TLargeintField
@@ -1126,19 +1125,11 @@ object dmOutlay: TdmOutlay
       Origin = '"SPECIFICATION"."REQUESTID"'
       Required = True
     end
-    object IBSpecificationLINENO: TLargeintField
-      FieldName = 'LINENO'
-      Origin = '"SPECIFICATION"."LINENO"'
-    end
     object IBSpecificationPARTNAME: TIBStringField
       FieldName = 'PARTNAME'
       Origin = '"SPECIFICATION"."PARTNAME"'
       Required = True
       Size = 1024
-    end
-    object IBSpecificationQTY: TFloatField
-      FieldName = 'QTY'
-      Origin = '"SPECIFICATION"."QTY"'
     end
     object IBSpecificationPRICEID: TLargeintField
       FieldName = 'PRICEID'
@@ -1148,14 +1139,17 @@ object dmOutlay: TdmOutlay
       FieldName = 'PRICE'
       Origin = '"SPECIFICATION"."PRICE"'
     end
+    object IBSpecificationLINENO: TLargeintField
+      FieldName = 'LINENO'
+      Origin = '"SPECIFICATION"."LINENO"'
+    end
     object IBSpecificationDISCOUNT: TFloatField
       FieldName = 'DISCOUNT'
       Origin = '"SPECIFICATION"."DISCOUNT"'
     end
-    object IBSpecificationVAT: TLargeintField
-      FieldName = 'VAT'
-      Origin = '"SPECIFICATION"."VAT"'
-      Required = True
+    object IBSpecificationQTY: TFloatField
+      FieldName = 'QTY'
+      Origin = '"SPECIFICATION"."QTY"'
     end
     object IBSpecificationCOST: TFloatField
       FieldKind = fkInternalCalc
@@ -1164,23 +1158,20 @@ object dmOutlay: TdmOutlay
       ProviderFlags = []
       ReadOnly = True
     end
-    object IBSpecificationTAG: TIBStringField
-      FieldName = 'TAG'
-      Origin = '"SPECIFICATION"."TAG"'
-      Size = 16
+    object IBSpecificationVAT: TLargeintField
+      FieldName = 'VAT'
+      Origin = '"SPECIFICATION"."VAT"'
+      Required = True
     end
     object IBSpecificationNOTES: TIBStringField
       FieldName = 'NOTES'
       Origin = '"SPECIFICATION"."NOTES"'
       Size = 4096
     end
-    object IBSpecificationCREATED: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"SPECIFICATION"."CREATED"'
-    end
-    object IBSpecificationMODIFIED: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"SPECIFICATION"."MODIFIED"'
+    object IBSpecificationTAG: TIBStringField
+      FieldName = 'TAG'
+      Origin = '"SPECIFICATION"."TAG"'
+      Size = 16
     end
   end
   object dsSpecification: TDataSource
@@ -1560,7 +1551,7 @@ object dmOutlay: TdmOutlay
     Transaction = IBTransaction
     AfterInsert = IBLSpecificationAfterInsert
     BufferChunks = 1000
-    CachedUpdates = False
+    CachedUpdates = True
     DeleteSQL.Strings = (
       'delete from SPECIFICATION'
       'where'
@@ -1589,16 +1580,14 @@ object dmOutlay: TdmOutlay
       '  VAT,'
       '  COST,'
       '  TAG,'
-      '  NOTES,'
-      '  CREATED,'
-      '  MODIFIED'
+      '  NOTES'
       'from SPECIFICATION '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
       
         'select  ID,REQUESTID,LINENO,PARTNAME,QTY,PRICEID,PRICE,DISCOUNT,' +
-        'VAT,COST,TAG,NOTES,CREATED,MODIFIED'
+        'VAT,COST,TAG,NOTES'
       'from SPECIFICATION where REQUESTID = :ID')
     ModifySQL.Strings = (
       'update SPECIFICATION'
@@ -1683,10 +1672,115 @@ object dmOutlay: TdmOutlay
       Origin = '"SPECIFICATION"."NOTES"'
       Size = 4096
     end
+    object IBLSpecificationPRICEORG: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PRICELOOKUP'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'VAL'
+      KeyFields = 'PRICEID'
+      Size = 1024
+      Lookup = True
+    end
   end
   object dslSpecification: TDataSource
     DataSet = IBLSpecification
     Left = 684
     Top = 360
+  end
+  object IBPriceOrg: TIBDataSet
+    Database = IBDatabase
+    Transaction = IBTransaction
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from PRICE'
+      'where'
+      '  ID = :OLD_ID')
+    InsertSQL.Strings = (
+      'insert into PRICE'
+      '  (ID, PARTNAME, ORGNAME, CURRENCY, PRICE, SRC, NOTES)'
+      'values'
+      '  (:ID, :PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :SRC, :NOTES)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  ID,'
+      '  PARTNAME,'
+      '  ORGNAME,'
+      '  CURRENCY,'
+      '  PRICE,'
+      '  CREATED,'
+      '  MODIFIED,'
+      '  SRC,'
+      '  NOTES'
+      'from PRICE '
+      'where'
+      '  ID = :ID')
+    SelectSQL.Strings = (
+      
+        'select ID,PARTNAME,ORGNAME,CURRENCY,PRICE,CREATED,MODIFIED,SRC,N' +
+        'OTES,'
+      'ORGNAME || '#39' '#39' || round(PRICE, 2) || '#39' '#39' || CURRENCY VAL'
+      'from PRICE')
+    ModifySQL.Strings = (
+      'update PRICE'
+      'set'
+      '  ID = :ID,'
+      '  PARTNAME = :PARTNAME,'
+      '  ORGNAME = :ORGNAME,'
+      '  CURRENCY = :CURRENCY,'
+      '  PRICE = :PRICE,'
+      '  SRC = :SRC,'
+      '  NOTES = :NOTES'
+      'where'
+      '  ID = :OLD_ID')
+    ParamCheck = True
+    UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PRICE_ID'
+    Active = True
+    Left = 688
+    Top = 416
+    object LargeintField9: TLargeintField
+      FieldName = 'ID'
+      Origin = '"PRICE"."ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object IBStringField14: TIBStringField
+      FieldName = 'PARTNAME'
+      Origin = '"PRICE"."PARTNAME"'
+      Size = 1024
+    end
+    object IBStringField15: TIBStringField
+      FieldName = 'ORGNAME'
+      Origin = '"PRICE"."ORGNAME"'
+      Size = 1024
+    end
+    object IBStringField16: TIBStringField
+      FieldName = 'CURRENCY'
+      Origin = '"PRICE"."CURRENCY"'
+      Size = 1024
+    end
+    object FloatField5: TFloatField
+      FieldName = 'PRICE'
+      Origin = '"PRICE"."PRICE"'
+    end
+    object IBStringField17: TIBStringField
+      FieldName = 'SRC'
+      Origin = '"PRICE"."SRC"'
+      Size = 255
+    end
+    object IBStringField18: TIBStringField
+      FieldName = 'NOTES'
+      Origin = '"PRICE"."NOTES"'
+      Size = 4096
+    end
+    object IBPriceOrgVAL: TIBStringField
+      FieldName = 'VAL'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 2074
+    end
   end
 end

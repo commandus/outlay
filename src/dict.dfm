@@ -125,6 +125,10 @@
     object TabSheet12: TTabSheet
       Caption = #1050#1072#1090#1072#1083#1086#1075
       ImageIndex = 13
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -257,6 +261,10 @@
     object TabSheet4: TTabSheet
       Caption = #1055#1088#1086#1077#1082#1090#1099
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -353,6 +361,10 @@
     end
     object TabSheet1: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089#1099
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -475,6 +487,10 @@
     object TabSheet2: TTabSheet
       Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -584,6 +600,10 @@
     object TabSheet10: TTabSheet
       Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082#1080
       ImageIndex = 11
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -633,6 +653,10 @@
     object Организации: TTabSheet
       Caption = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -736,6 +760,10 @@
     object TabSheet5: TTabSheet
       Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082#1080
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -856,6 +884,10 @@
     object НДС: TTabSheet
       Caption = #1053#1044#1057
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -905,6 +937,10 @@
     object TabSheet6: TTabSheet
       Caption = #1058#1080#1087#1099' '#1086#1088#1075'.'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -953,6 +989,10 @@
     object TabSheet3: TTabSheet
       Caption = #1044#1086#1083#1078#1085#1086#1089#1090#1080
       ImageIndex = 7
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1002,6 +1042,10 @@
     object TabSheet7: TTabSheet
       Caption = #1045#1076'.'#1080#1079#1084'.'
       ImageIndex = 8
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1051,6 +1095,10 @@
     object TabSheet8: TTabSheet
       Caption = #1058#1080#1087' '#1087#1088#1086#1076#1072#1078
       ImageIndex = 9
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1100,6 +1148,10 @@
     object TabSheet9: TTabSheet
       Caption = #1042#1072#1083'.'
       ImageIndex = 10
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1156,6 +1208,10 @@
     object TabSheet11: TTabSheet
       Caption = #1050#1072#1090'.'
       ImageIndex = 12
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         616
         417)

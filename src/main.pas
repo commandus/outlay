@@ -8,7 +8,7 @@ uses
   Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Menus, DBAxisGridsEh,
   DBGridEh, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, EhLibVCL,
   GridsEh, Vcl.StdCtrls, VCL.Themes, EhLibIBX, DbUtilsEh, Vcl.ComCtrls,
-  dm, rpt, dict, settings, myorg;
+  dm, rpt, dict, settings, myorg, IBX.IBCustomDataSet;
 
 type
   TFormMain = class(TForm)
@@ -39,6 +39,15 @@ type
     MenuSave: TMenuItem;
     MenuCancel: TMenuItem;
     MenuSep2: TMenuItem;
+    ibPrice: TIBDataSet;
+    ibPriceID: TLargeintField;
+    ibPricePARTNAME: TIBStringField;
+    ibPriceORGNAME: TIBStringField;
+    ibPriceCURRENCY: TIBStringField;
+    ibPricePRICE: TFloatField;
+    ibPriceSRC: TIBStringField;
+    ibPriceNOTES: TIBStringField;
+    dsPrice: TDataSource;
     procedure ShowOptions();
     procedure ShowMyOrg();
     procedure ShowDict();
@@ -69,6 +78,7 @@ begin
   if not dm.dmOutlay.IBDatabase.Connected then begin
     ShowOptions();
   end;
+  dm.dmOutlay.ActivateDbControls(Self);
   DbUtilsEh.SQLFilterMarker:= '/*Filter*/';
 end;
 
@@ -99,7 +109,6 @@ end;
 
 procedure TFormMain.MenuReportClick(Sender: TObject);
 begin
-
   if FormReports = Nil then
     FormReports:= TFormReports.Create(Self);
   FormReports.Show();

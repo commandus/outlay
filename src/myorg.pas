@@ -16,9 +16,8 @@ uses
 
 type
   TFormMyOrg = class(TFormOutlay)
-    DBComboboxEh1: TDBComboBoxEh;
-    DBGridProjectList: TDBGridEh;
-    IBQMyOrg: TIBQuery;
+    DBCBEhMyOrg: TDBLookupComboboxEh;
+    DBGridOrgList: TDBGridEh;
     dsMyOrg: TDataSource;
     IBQueryOrg: TIBQuery;
     BSetOwner: TButton;
@@ -26,10 +25,13 @@ type
     Label1: TLabel;
     Label2: TLabel;
     IBQueryOrgORGNAME: TIBStringField;
-    IBQueryOrgOWNER: TIBStringField;
-    IBQMyOrgORGNAME: TIBStringField;
-    IBQueryLookup: TIBQuery;
-    IBStringField1: TIBStringField;
+    IBOrg: TIBDataSet;
+    IBOrgORGNAME: TIBStringField;
+    dsOrg: TDataSource;
+    IBMyOrg: TIBDataSet;
+    IBStringField2: TIBStringField;
+    IBOrgOWNER: TIBStringField;
+    dsOrgList: TDataSource;
     procedure BSetOwnerClick(Sender: TObject);
     procedure BSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -69,26 +71,13 @@ begin
 end;
 
 procedure TFormMyOrg.BSetOwnerClick(Sender: TObject);
-var
-  o: String;
 begin
-  o:= DBComboboxEh1.Text;
-  SetOrgOwner(DBGridProjectList, o);
+  SetOrgOwner(DBGridOrgList, DBCBEhMyOrg.Text);
 end;
 
 procedure TFormMyOrg.FormCreate(Sender: TObject);
-var
-  c: Integer;
 begin
-  try
-    for c:= 0 to ComponentCount - 1 do begin
-      if (Components[c] is TIBQuery) then
-        TIBQuery(Components[c]).Active:= true;
-      if (Components[c] is TIBDataset) then
-        TIBDataset(Components[c]).Active:= true;
-    end;
-  finally
-  end;
+  dm.dmOutlay.ActivateDbControls(Self);
 end;
 
 end.

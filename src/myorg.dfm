@@ -31,14 +31,16 @@ object FormMyOrg: TFormMyOrg
     Height = 13
     Caption = '&'#1042#1099#1073#1077#1088#1080#1090#1077' '#1076#1086#1095#1077#1088#1085#1080#1077' '#1080' '#1087#1086#1084#1077#1090#1100#1090#1077
   end
-  object DBGridProjectList: TDBGridEh
+  object DBGridOrgList: TDBGridEh
     Left = 8
     Top = 64
     Width = 425
     Height = 386
     Anchors = [akLeft, akTop, akRight, akBottom]
-    DataSource = dsMyOrg
+    ColumnDefValues.Title.TitleButton = True
+    DataSource = dsOrg
     DynProps = <>
+    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
     TabOrder = 0
     Columns = <
       item
@@ -58,7 +60,6 @@ object FormMyOrg: TFormMyOrg
         FieldName = 'OWNER'
         Footers = <>
         LookupParams.KeyFieldNames = 'ORGNAME'
-        LookupParams.LookupDataSet = IBQueryLookup
         LookupParams.LookupDisplayFieldName = 'ORGNAME'
         LookupParams.LookupKeyFieldNames = 'ORGNAME'
         Title.Caption = #1043#1086#1083#1086#1074#1085#1072#1103' '#1086#1088#1075#1072#1085#1080#1079#1072#1094#1080#1103
@@ -67,15 +68,18 @@ object FormMyOrg: TFormMyOrg
     object RowDetailData: TRowDetailPanelControlEh
     end
   end
-  object DBComboboxEh1: TDBComboBoxEh
+  object DBCBEhMyOrg: TDBLookupComboboxEh
     Left = 8
     Top = 21
     Width = 425
     Height = 21
+    DynProps = <>
     DataField = 'ORGNAME'
     DataSource = dsMyOrg
-    DynProps = <>
     EditButtons = <>
+    KeyField = 'ORGNAME'
+    ListField = 'ORGNAME'
+    ListSource = dsOrgList
     TabOrder = 1
     Visible = True
   end
@@ -100,29 +104,10 @@ object FormMyOrg: TFormMyOrg
     TabOrder = 3
     OnClick = BSaveClick
   end
-  object IBQMyOrg: TIBQuery
-    Database = dmOutlay.IBDatabase
-    Transaction = dmOutlay.IBTransaction
-    Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
-    ParamCheck = True
-    SQL.Strings = (
-      'select ORGNAME from ORG')
-    Left = 456
-    Top = 192
-    object IBQMyOrgORGNAME: TIBStringField
-      FieldName = 'ORGNAME'
-      Origin = '"ORG"."ORGNAME"'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-      Size = 1024
-    end
-  end
   object dsMyOrg: TDataSource
-    DataSet = IBQMyOrg
+    DataSet = IBMyOrg
     Left = 456
-    Top = 240
+    Top = 264
   end
   object IBQueryOrg: TIBQuery
     Database = dmOutlay.IBDatabase
@@ -132,7 +117,7 @@ object FormMyOrg: TFormMyOrg
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
-      'select ORGNAME, OWNER from ORG')
+      'select ORGNAME from ORG order by ORGNAME')
     Left = 456
     Top = 120
     object IBQueryOrgORGNAME: TIBStringField
@@ -142,29 +127,122 @@ object FormMyOrg: TFormMyOrg
       Required = True
       Size = 1024
     end
-    object IBQueryOrgOWNER: TIBStringField
-      FieldName = 'OWNER'
-      Origin = '"ORG"."OWNER"'
-      Size = 1024
-    end
   end
-  object IBQueryLookup: TIBQuery
+  object IBOrg: TIBDataSet
     Database = dmOutlay.IBDatabase
     Transaction = dmOutlay.IBTransaction
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from ORG'
+      'where'
+      '  ORGNAME = :OLD_ORGNAME')
+    InsertSQL.Strings = (
+      'insert into ORG'
+      '  (ORGNAME)'
+      'values'
+      '  (:ORGNAME)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  ORGTYPE,'
+      '  ORGNAME,'
+      '  FULLNAME,'
+      '  ALTNAME,'
+      '  INN,'
+      '  DESCRIPTION,'
+      '  TAG,'
+      '  CREATED,'
+      '  MODIFIED,'
+      '  LOGO,'
+      '  OWNER'
+      'from ORG '
+      'where'
+      '  ORGNAME = :ORGNAME')
+    SelectSQL.Strings = (
+      'select ORGNAME, OWNER FROM ORG')
+    ModifySQL.Strings = (
+      'update ORG'
+      'set'
+      '  ORGNAME = :ORGNAME'
+      'where'
+      '  ORGNAME = :OLD_ORGNAME')
     ParamCheck = True
-    SQL.Strings = (
-      'select ORGNAME from ORG')
-    Left = 504
-    Top = 120
-    object IBStringField1: TIBStringField
+    UniDirectional = False
+    Active = True
+    Left = 532
+    Top = 232
+    object IBOrgORGNAME: TIBStringField
       FieldName = 'ORGNAME'
       Origin = '"ORG"."ORGNAME"'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
       Size = 1024
     end
+    object IBOrgOWNER: TIBStringField
+      FieldName = 'OWNER'
+      Origin = '"ORG"."OWNER"'
+      Size = 1024
+    end
+  end
+  object dsOrg: TDataSource
+    DataSet = IBOrg
+    Left = 532
+    Top = 280
+  end
+  object IBMyOrg: TIBDataSet
+    Database = dmOutlay.IBDatabase
+    Transaction = dmOutlay.IBTransaction
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from ORG'
+      'where'
+      '  ORGNAME = :OLD_ORGNAME')
+    InsertSQL.Strings = (
+      'insert into ORG'
+      '  (ORGNAME)'
+      'values'
+      '  (:ORGNAME)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  ORGTYPE,'
+      '  ORGNAME,'
+      '  FULLNAME,'
+      '  ALTNAME,'
+      '  INN,'
+      '  DESCRIPTION,'
+      '  TAG,'
+      '  CREATED,'
+      '  MODIFIED,'
+      '  LOGO,'
+      '  OWNER'
+      'from ORG '
+      'where'
+      '  ORGNAME = :ORGNAME')
+    SelectSQL.Strings = (
+      'select ORGNAME FROM ORG')
+    ModifySQL.Strings = (
+      'update ORG'
+      'set'
+      '  ORGNAME = :ORGNAME'
+      'where'
+      '  ORGNAME = :OLD_ORGNAME')
+    ParamCheck = True
+    UniDirectional = False
+    Active = True
+    Left = 452
+    Top = 216
+    object IBStringField2: TIBStringField
+      FieldName = 'ORGNAME'
+      Origin = '"ORG"."ORGNAME"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 1024
+    end
+  end
+  object dsOrgList: TDataSource
+    DataSet = IBQueryOrg
+    Left = 452
+    Top = 168
   end
 end

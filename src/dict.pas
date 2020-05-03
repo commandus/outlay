@@ -81,8 +81,7 @@ end;
 
 procedure TFormDict.FormCreate(Sender: TObject);
 begin
-  // open datasources if not
-  // there are no datasources in thew form
+  dm.dmOutlay.ActivateDbControls(Self);
 end;
 
 end.

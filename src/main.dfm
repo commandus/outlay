@@ -205,11 +205,29 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'PRICELOOKUP'
+              Footers = <>
+              Title.Caption = #1055#1088#1072#1081#1089'-'#1083#1080#1089#1090
+              Width = 97
+            end
+            item
+              CellButtons = <>
+              DropDownBox.Columns = <
+                item
+                  FieldName = 'ID'
+                end
+                item
+                  FieldName = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1103
+                end>
+              DropDownBox.ListFieldNames = 'ID;ORGNAME'
+              DropDownBox.ListSource = dsPrice
+              DropDownRows = 15
+              DropDownShowTitles = True
+              DropDownSizing = True
+              DynProps = <>
+              EditButtons = <>
               FieldName = 'PRICEID'
               Footers = <>
-              LookupParams.KeyFieldNames = 'PRICEID'
-              LookupParams.LookupDataSet = dmOutlay.ibPrice
-              LookupParams.LookupKeyFieldNames = 'ID'
               Title.Caption = #1055#1088#1072#1081#1089
               Width = 86
             end
@@ -578,8 +596,8 @@ object FormMain: TFormMain
     end
   end
   object MainMenu: TMainMenu
-    Left = 488
-    Top = 368
+    Left = 328
+    Top = 408
     object MenuSettings: TMenuItem
       Caption = '&'#1060#1072#1081#1083
       object MenuReport: TMenuItem
@@ -626,5 +644,98 @@ object FormMain: TFormMain
       ShortCut = 115
       OnClick = MenuCancelClick
     end
+  end
+  object ibPrice: TIBDataSet
+    Database = dmOutlay.IBDatabase
+    Transaction = dmOutlay.IBTransaction
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from PRICE'
+      'where'
+      '  ID = :OLD_ID')
+    InsertSQL.Strings = (
+      'insert into PRICE'
+      '  (ID, PARTNAME, ORGNAME, CURRENCY, PRICE, SRC, NOTES)'
+      'values'
+      '  (:ID, :PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :SRC, :NOTES)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  ID,'
+      '  PARTNAME,'
+      '  ORGNAME,'
+      '  CURRENCY,'
+      '  PRICE,'
+      '  CREATED,'
+      '  MODIFIED,'
+      '  SRC,'
+      '  NOTES'
+      'from PRICE '
+      'where'
+      '  ID = :ID')
+    SelectSQL.Strings = (
+      
+        'select ID,PARTNAME,ORGNAME,CURRENCY,PRICE,CREATED,MODIFIED,SRC,N' +
+        'OTES'
+      'from PRICE WHERE PARTNAME = :PARTNAME')
+    ModifySQL.Strings = (
+      'update PRICE'
+      'set'
+      '  ID = :ID,'
+      '  PARTNAME = :PARTNAME,'
+      '  ORGNAME = :ORGNAME,'
+      '  CURRENCY = :CURRENCY,'
+      '  PRICE = :PRICE,'
+      '  SRC = :SRC,'
+      '  NOTES = :NOTES'
+      'where'
+      '  ID = :OLD_ID')
+    ParamCheck = True
+    UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PRICE_ID'
+    DataSource = dmOutlay.dslSpecification
+    Left = 380
+    Top = 344
+    object ibPriceID: TLargeintField
+      FieldName = 'ID'
+      Origin = '"PRICE"."ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object ibPricePARTNAME: TIBStringField
+      FieldName = 'PARTNAME'
+      Origin = '"PRICE"."PARTNAME"'
+      Size = 1024
+    end
+    object ibPriceORGNAME: TIBStringField
+      FieldName = 'ORGNAME'
+      Origin = '"PRICE"."ORGNAME"'
+      Size = 1024
+    end
+    object ibPriceCURRENCY: TIBStringField
+      FieldName = 'CURRENCY'
+      Origin = '"PRICE"."CURRENCY"'
+      Size = 1024
+    end
+    object ibPricePRICE: TFloatField
+      FieldName = 'PRICE'
+      Origin = '"PRICE"."PRICE"'
+    end
+    object ibPriceSRC: TIBStringField
+      FieldName = 'SRC'
+      Origin = '"PRICE"."SRC"'
+      Size = 255
+    end
+    object ibPriceNOTES: TIBStringField
+      FieldName = 'NOTES'
+      Origin = '"PRICE"."NOTES"'
+      Size = 4096
+    end
+  end
+  object dsPrice: TDataSource
+    DataSet = ibPrice
+    Left = 380
+    Top = 392
   end
 end

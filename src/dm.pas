@@ -109,20 +109,6 @@ type
     IBRequestCurrencyRateVAL: TFloatField;
     dsRequestCurrencyRate: TDataSource;
     IBSpecification: TIBDataSet;
-    IBSpecificationID: TLargeintField;
-    IBSpecificationREQUESTID: TLargeintField;
-    IBSpecificationLINENO: TLargeintField;
-    IBSpecificationPARTNAME: TIBStringField;
-    IBSpecificationQTY: TFloatField;
-    IBSpecificationPRICEID: TLargeintField;
-    IBSpecificationPRICE: TFloatField;
-    IBSpecificationDISCOUNT: TFloatField;
-    IBSpecificationVAT: TLargeintField;
-    IBSpecificationCOST: TFloatField;
-    IBSpecificationTAG: TIBStringField;
-    IBSpecificationNOTES: TIBStringField;
-    IBSpecificationCREATED: TDateTimeField;
-    IBSpecificationMODIFIED: TDateTimeField;
     dsSpecification: TDataSource;
     IBCurrency: TIBDataSet;
     IBCurrencyCURRENCYSYMBOL: TIBStringField;
@@ -172,6 +158,28 @@ type
     IBStringField12: TIBStringField;
     IBStringField13: TIBStringField;
     dslSpecification: TDataSource;
+    IBPriceOrg: TIBDataSet;
+    LargeintField9: TLargeintField;
+    IBStringField14: TIBStringField;
+    IBStringField15: TIBStringField;
+    IBStringField16: TIBStringField;
+    FloatField5: TFloatField;
+    IBStringField17: TIBStringField;
+    IBStringField18: TIBStringField;
+    IBSpecificationCOST: TFloatField;
+    IBSpecificationDISCOUNT: TFloatField;
+    IBSpecificationID: TLargeintField;
+    IBSpecificationLINENO: TLargeintField;
+    IBSpecificationNOTES: TIBStringField;
+    IBSpecificationPARTNAME: TIBStringField;
+    IBSpecificationPRICE: TFloatField;
+    IBSpecificationPRICEID: TLargeintField;
+    IBSpecificationQTY: TFloatField;
+    IBSpecificationREQUESTID: TLargeintField;
+    IBSpecificationTAG: TIBStringField;
+    IBSpecificationVAT: TLargeintField;
+    IBLSpecificationPRICEORG: TStringField;
+    IBPriceOrgVAL: TIBStringField;
     procedure DataModuleCreate(Sender: TObject);
     procedure dslRequestUpdateData(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
@@ -203,6 +211,7 @@ type
     procedure loadSettings();
     procedure saveSettings();
     function connectionString: AnsiString;
+    class procedure ActivateDbControls(component: TComponent);
   end;
 
 var
@@ -423,6 +432,21 @@ end;
 function TdmOutlay.GetSelectedRequestId(): LongWord;
 begin
   Result:= IBLRequest.FieldByName('ID').AsLongWord;
+end;
+
+class procedure TdmOutlay.ActivateDbControls(component: TComponent);
+var
+  c: Integer;
+begin
+  try
+    for c:= 0 to component.ComponentCount - 1 do begin
+      if (component.Components[c] is TIBQuery) then
+        TIBQuery(component.Components[c]).Active:= true;
+      if (component.Components[c] is TIBDataset) then
+        TIBDataset(component.Components[c]).Active:= true;
+    end;
+  finally
+  end;
 end;
 
 end.
