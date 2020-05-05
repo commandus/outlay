@@ -8,7 +8,8 @@ uses
   Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Menus, DBAxisGridsEh,
   DBGridEh, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, EhLibVCL,
   GridsEh, Vcl.StdCtrls, VCL.Themes, EhLibIBX, DbUtilsEh, Vcl.ComCtrls,
-  dm, rpt, dict, settings, myorg, IBX.IBCustomDataSet;
+  IBX.IBCustomDataSet, ShellApi,
+  dm, rpt, dict, settings, myorg, about;
 
 type
   TFormMain = class(TForm)
@@ -48,6 +49,12 @@ type
     ibPriceSRC: TIBStringField;
     ibPriceNOTES: TIBStringField;
     dsPrice: TDataSource;
+    ManuHelp: TMenuItem;
+    MenuHelpAbout: TMenuItem;
+    MenuHelpUserGuide: TMenuItem;
+    TabSheet5: TTabSheet;
+    DBNavigator6: TDBNavigator;
+    DBGridEh6: TDBGridEh;
     procedure ShowOptions();
     procedure ShowMyOrg();
     procedure ShowDict();
@@ -60,6 +67,8 @@ type
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuCancelClick(Sender: TObject);
     procedure MenuReportClick(Sender: TObject);
+    procedure MenuHelpAboutClick(Sender: TObject);
+    procedure MenuHelpUserGuideClick(Sender: TObject);
   private
     procedure Rollback3();
     procedure Commit3();
@@ -73,13 +82,17 @@ implementation
 
 {$R *.dfm}
 
+const URL_USER_GUIDE = 'https://docs.google.com/document/d/1ilBTF2z5BMg_kmHjyQnYWb5hFhUK5fvylxXYMa8Zv7I/edit?usp=sharing';
+
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   if not dm.dmOutlay.IBDatabase.Connected then begin
     ShowOptions();
   end;
-  dm.dmOutlay.ActivateDbControls(Self);
-  DbUtilsEh.SQLFilterMarker:= '/*Filter*/';
+  if dm.dmOutlay.IBDatabase.Connected then begin
+    dm.dmOutlay.ActivateDbControls(Self);
+    DbUtilsEh.SQLFilterMarker:= '/*Filter*/';
+  end;
 end;
 
 procedure TFormMain.MenuCancelClick(Sender: TObject);
@@ -95,6 +108,20 @@ end;
 procedure TFormMain.MenuExitClick(Sender: TObject);
 begin
   Close();
+end;
+
+procedure TFormMain.MenuHelpAboutClick(Sender: TObject);
+begin
+  FormAbout:= TFormAbout.Create(Self);
+  FormAbout.ShowModal();
+  FreeAndNil(FormAbout);
+end;
+
+procedure TFormMain.MenuHelpUserGuideClick(Sender: TObject);
+begin
+   ShellExecuteA(Application.Handle, PAnsiChar('open'),
+     PAnsiChar(URL_USER_GUIDE),
+     Nil, Nil, SW_SHOW);
 end;
 
 procedure TFormMain.MenuOptionsClick(Sender: TObject);
@@ -125,6 +152,11 @@ begin
   FormSettings:= TFormSettings.Create(Self);
   FormSettings.ShowModal();
   FreeAndNil(FormSettings);
+  dm.dmOutlay.connect(dm.dmOutlay.IBDatabase);
+  if dm.dmOutlay.IBDatabase.Connected then begin
+    dm.dmOutlay.ActivateDbControls(Self);
+    DbUtilsEh.SQLFilterMarker:= '/*Filter*/';
+  end;
   FormMain.Show();
 end;
 

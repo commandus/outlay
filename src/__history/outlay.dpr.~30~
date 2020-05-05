@@ -10,8 +10,7 @@ uses
   formoutlay in 'formoutlay.pas',
   settings in 'settings.pas' {FormSettings},
   myorg in 'myorg.pas' {FormMyOrg},
-  dict in 'dict.pas' {FormDict},
-  about in 'about.pas' {FormAbout};
+  dict in 'dict.pas' {FormDict};
 
 {$R *.res}
 

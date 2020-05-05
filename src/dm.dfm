@@ -1190,25 +1190,29 @@ object dmOutlay: TdmOutlay
       '  CURRENCYSYMBOL = :OLD_CURRENCYSYMBOL')
     InsertSQL.Strings = (
       'insert into VALIDCURRENCY'
-      '  (CURRENCYSYMBOL, NAME, DEFAULTRATE)'
+      '  (CURRENCYSYMBOL, NAME, DEFAULTRATE, ISLOCAL)'
       'values'
-      '  (:CURRENCYSYMBOL, :NAME, :DEFAULTRATE)')
+      '  (:CURRENCYSYMBOL, :NAME, :DEFAULTRATE, :ISLOCAL)')
     RefreshSQL.Strings = (
       'Select '
       '  CURRENCYSYMBOL,'
       '  NAME,'
-      '  DEFAULTRATE'
+      '  DEFAULTRATE,'
+      '  ISLOCAL'
       'from VALIDCURRENCY '
       'where'
       '  CURRENCYSYMBOL = :CURRENCYSYMBOL')
     SelectSQL.Strings = (
-      'select CURRENCYSYMBOL, NAME, DEFAULTRATE from VALIDCURRENCY')
+      
+        'select CURRENCYSYMBOL, NAME, DEFAULTRATE, ISLOCAL from VALIDCURR' +
+        'ENCY')
     ModifySQL.Strings = (
       'update VALIDCURRENCY'
       'set'
       '  CURRENCYSYMBOL = :CURRENCYSYMBOL,'
       '  NAME = :NAME,'
-      '  DEFAULTRATE = :DEFAULTRATE'
+      '  DEFAULTRATE = :DEFAULTRATE,'
+      '  ISLOCAL = :ISLOCAL'
       'where'
       '  CURRENCYSYMBOL = :OLD_CURRENCYSYMBOL')
     ParamCheck = True
@@ -1232,6 +1236,10 @@ object dmOutlay: TdmOutlay
     object IBCurrencyDEFAULTRATE: TFloatField
       FieldName = 'DEFAULTRATE'
       Origin = '"VALIDCURRENCY"."DEFAULTRATE"'
+    end
+    object IBCurrencyISLOCAL: TLargeintField
+      FieldName = 'ISLOCAL'
+      Origin = '"VALIDCURRENCY"."ISLOCAL"'
     end
   end
   object dsValidCurrency: TDataSource
@@ -1542,7 +1550,6 @@ object dmOutlay: TdmOutlay
   end
   object dslRequest: TDataSource
     DataSet = IBLRequest
-    OnUpdateData = dslRequestUpdateData
     Left = 608
     Top = 360
   end
@@ -1550,6 +1557,7 @@ object dmOutlay: TdmOutlay
     Database = IBDatabase
     Transaction = IBTransaction
     AfterInsert = IBLSpecificationAfterInsert
+    OnCalcFields = IBLSpecificationCalcFields
     BufferChunks = 1000
     CachedUpdates = True
     DeleteSQL.Strings = (
@@ -1609,7 +1617,6 @@ object dmOutlay: TdmOutlay
     UniDirectional = False
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_SPECIFICATION_ID'
-    Active = True
     DataSource = dslRequest
     Left = 680
     Top = 296
@@ -1672,15 +1679,89 @@ object dmOutlay: TdmOutlay
       Origin = '"SPECIFICATION"."NOTES"'
       Size = 4096
     end
-    object IBLSpecificationPRICEORG: TStringField
+    object IBLSpecificationPRICEVAL: TStringField
       FieldKind = fkLookup
-      FieldName = 'PRICELOOKUP'
+      FieldName = 'PRICEVAL'
       LookupDataSet = IBPriceOrg
       LookupKeyFields = 'ID'
       LookupResultField = 'VAL'
       KeyFields = 'PRICEID'
       Size = 1024
       Lookup = True
+    end
+    object IBLSpecificationPRICEORGNAME: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PRICEORGNAME'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'ORGNAME'
+      KeyFields = 'PRICEID'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPRICEPRICE: TCurrencyField
+      FieldKind = fkLookup
+      FieldName = 'PRICEPRICE'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'PRICE'
+      KeyFields = 'PRICEID'
+      Lookup = True
+    end
+    object IBLSpecificationPRICECURRENCY: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PRICECURRENCY'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'CURRENCY'
+      KeyFields = 'PRICEID'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPRICESRC: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PRICESRC'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'SRC'
+      KeyFields = 'PRICEID'
+      Size = 255
+      Lookup = True
+    end
+    object IBLSpecificationPRICENOTES: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PRICENOTES'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NOTES'
+      KeyFields = 'PRICEID'
+      Size = 4096
+      Lookup = True
+    end
+    object IBLSpecificationPRICEPARTNAME: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PRICEPARTNAME'
+      LookupDataSet = IBPriceOrg
+      LookupKeyFields = 'ID'
+      LookupResultField = 'PARTNAME'
+      KeyFields = 'PRICEID'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPRICERUB: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'PRICERUB'
+      Calculated = True
+    end
+    object IBLSpecificationCOSTLIST: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'COSTLIST'
+      Calculated = True
+    end
+    object IBLSpecificationCOSTDISCOUNT: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'COSTDISCOUNT'
+      Calculated = True
     end
   end
   object dslSpecification: TDataSource
@@ -1720,7 +1801,7 @@ object dmOutlay: TdmOutlay
       
         'select ID,PARTNAME,ORGNAME,CURRENCY,PRICE,CREATED,MODIFIED,SRC,N' +
         'OTES,'
-      'ORGNAME || '#39' '#39' || round(PRICE, 2) || '#39' '#39' || CURRENCY VAL'
+      'ORGNAME || '#39' '#39' || round(PRICE, 2) || CURRENCY VAL'
       'from PRICE')
     ModifySQL.Strings = (
       'update PRICE'
@@ -1739,7 +1820,7 @@ object dmOutlay: TdmOutlay
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_PRICE_ID'
     Active = True
-    Left = 688
+    Left = 680
     Top = 416
     object LargeintField9: TLargeintField
       FieldName = 'ID'

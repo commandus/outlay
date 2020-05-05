@@ -178,13 +178,20 @@ type
     IBSpecificationREQUESTID: TLargeintField;
     IBSpecificationTAG: TIBStringField;
     IBSpecificationVAT: TLargeintField;
-    IBLSpecificationPRICEORG: TStringField;
+    IBLSpecificationPRICEVAL: TStringField;
     IBPriceOrgVAL: TIBStringField;
+    IBLSpecificationPRICEORGNAME: TStringField;
+    IBLSpecificationPRICEPRICE: TCurrencyField;
+    IBLSpecificationPRICECURRENCY: TStringField;
+    IBLSpecificationPRICERUB: TCurrencyField;
+    IBCurrencyISLOCAL: TLargeintField;
+    IBLSpecificationCOSTLIST: TCurrencyField;
+    IBLSpecificationCOSTDISCOUNT: TCurrencyField;
     procedure DataModuleCreate(Sender: TObject);
-    procedure dslRequestUpdateData(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
     procedure IBLProjectAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationAfterInsert(DataSet: TDataSet);
+    procedure IBLSpecificationCalcFields(DataSet: TDataSet);
   private
     function getStyles: TStringList;
     function GetSelectedProjectName: String;
@@ -211,6 +218,7 @@ type
     procedure loadSettings();
     procedure saveSettings();
     function connectionString: AnsiString;
+    function getRate(const curr: string): Double;
     class procedure ActivateDbControls(component: TComponent);
   end;
 
@@ -228,11 +236,6 @@ begin
   inifilename:= ChangeFileExt(Application.ExeName, '.ini');
   loadSettings();
   connect(IBDatabase);
-end;
-
-procedure TdmOutlay.dslRequestUpdateData(Sender: TObject);
-begin
-
 end;
 
 {
@@ -322,6 +325,42 @@ begin
   begin
     DataSet.FieldByName('REQUESTID').AsLongWord:= GetSelectedRequestId();
      DataSet.FieldByName('VAT').AsLargeInt:= GetSelectedRequestVAT();
+  end;
+end;
+
+function TdmOutlay.getRate(const curr: string): Double;
+begin
+  IBCurrency.First;
+  while not IBCurrency.Eof do
+  begin
+    if curr = IBCurrency.FieldByName('CURRENCYSYMBOL').AsString  then begin
+      Result:= IBCurrency.FieldByName('DEFAULTRATE').AsCurrency;
+      Exit;
+    end;
+    IBCurrency.Next;
+  end;
+  Result:= 1.0;
+end;
+
+procedure TdmOutlay.IBLSpecificationCalcFields(DataSet: TDataSet);
+var
+  p, price: Currency;
+  c: String;
+  rate: double;
+  qty: double;
+begin
+  p:= DataSet.FieldByName('PRICEPRICE').AsCurrency;
+  if (Abs(p) < 0.001) then Exit;
+  c:= DataSet.FieldByName('PRICECURRENCY').AsString;
+  rate:= getRate(c);
+  price:= rate * p;
+  DataSet.FieldByName('PRICERUB').AsCurrency:= price;
+
+  qty:= DataSet.FieldByName('QTY').AsCurrency;
+  if (Abs(qty) > 0.001) then begin
+    DataSet.FieldByName('COSTLIST').AsCurrency:= price * qty;
+  end else begin
+    // DataSet.FieldByName('COSTLIST').Clear;
   end;
 end;
 
