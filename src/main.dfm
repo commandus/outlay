@@ -3,7 +3,7 @@ object FormMain: TFormMain
   Top = 0
   Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080' 1.0'
   ClientHeight = 541
-  ClientWidth = 784
+  ClientWidth = 1187
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,16 +18,18 @@ object FormMain: TFormMain
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 784
+    Width = 1187
     Height = 541
     ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     TabOrder = 0
     TabPosition = tpBottom
+    ExplicitWidth = 784
     object TabSheet3: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089
       ImageIndex = 3
+      ExplicitWidth = 776
       object Splitter1: TSplitter
         Left = 153
         Top = 0
@@ -62,16 +64,17 @@ object FormMain: TFormMain
       object Panel1: TPanel
         Left = 156
         Top = 0
-        Width = 620
+        Width = 1023
         Height = 515
         Align = alClient
         Ctl3D = False
         ParentCtl3D = False
         TabOrder = 1
+        ExplicitWidth = 620
         object Splitter2: TSplitter
           Left = 1
           Top = 121
-          Width = 618
+          Width = 1021
           Height = 3
           Cursor = crVSplit
           Align = alTop
@@ -80,7 +83,7 @@ object FormMain: TFormMain
         object DBGridEh3: TDBGridEh
           Left = 1
           Top = 1
-          Width = 618
+          Width = 1021
           Height = 120
           Align = alTop
           ColumnDefValues.Title.TitleButton = True
@@ -166,7 +169,7 @@ object FormMain: TFormMain
         object DBGridEh4: TDBGridEh
           Left = 1
           Top = 124
-          Width = 618
+          Width = 1021
           Height = 390
           Align = alClient
           ColumnDefValues.Title.TitleButton = True
@@ -192,52 +195,49 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'PARTNO'
+              Footers = <>
+              Title.Caption = #1040#1088#1090#1080#1082#1091#1083
+              Width = 100
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
               FieldName = 'PARTNAME'
               Footers = <>
               LookupParams.KeyFieldNames = 'PARTNAME'
               LookupParams.LookupDataSet = dmOutlay.IBPart
               LookupParams.LookupDisplayFieldName = 'NAME'
               LookupParams.LookupKeyFieldNames = 'NAME'
-              Title.Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
-              Width = 153
+              Title.Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1090#1086#1074#1072#1088#1072
+              Width = 121
             end
             item
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
-              FieldName = 'PRICEVAL'
+              FieldName = 'QTY'
               Footers = <>
-              Title.Caption = #1055#1088#1072#1081#1089'-'#1083#1080#1089#1090
-              Width = 136
+              Title.Caption = #1050#1086#1083'-'#1074#1086
+              Width = 39
             end
             item
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
-              FieldName = 'PRICEORGNAME'
+              FieldName = 'PARTMEASUREUNIT'
               Footers = <>
-              Title.Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082
-              Width = 120
+              Title.Caption = #1045#1076'.'#1080#1079#1084'.'
+              Width = 42
             end
             item
               CellButtons = <>
-              DropDownBox.Columns = <
-                item
-                  FieldName = 'ID'
-                end
-                item
-                  FieldName = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1103
-                end>
-              DropDownBox.ListFieldNames = 'ID;ORGNAME'
-              DropDownBox.ListSource = dsPrice
-              DropDownRows = 15
-              DropDownShowTitles = True
-              DropDownSizing = True
               DynProps = <>
               EditButtons = <>
               FieldName = 'PRICEPRICE'
               Footers = <>
-              Title.Caption = #1062#1077#1085#1072' '#1083#1080#1089#1090'.'
+              Title.Caption = #1042#1093#1086#1076
               Width = 70
             end
             item
@@ -255,15 +255,7 @@ object FormMain: TFormMain
               EditButtons = <>
               FieldName = 'PRICERUB'
               Footers = <>
-              Title.Caption = #1050#1091#1088#1089#1086#1074#1072#1103
-            end
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'QTY'
-              Footers = <>
-              Title.Caption = #1050#1086#1083'-'#1074#1086
+              Title.Caption = #1042#1093#1086#1076' '#1080#1090#1086#1075
             end
             item
               CellButtons = <>
@@ -271,7 +263,7 @@ object FormMain: TFormMain
               EditButtons = <>
               FieldName = 'COSTLIST'
               Footers = <>
-              Title.Caption = #1057#1090'-'#1090#1100' '#1083#1080#1089#1090'.'
+              Title.Caption = #1057#1091#1084#1084#1072', '#1088#1091#1073'.'
               Width = 63
             end
             item
@@ -280,7 +272,35 @@ object FormMain: TFormMain
               EditButtons = <>
               FieldName = 'DISCOUNT'
               Footers = <>
-              Title.Caption = #1044#1080#1089#1082#1086#1085#1090', %'
+              Title.Caption = #1053#1072#1082#1088#1091#1090#1082#1072', %'
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = #1062#1077#1085#1072'+%'
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = #1057#1091#1084#1084#1072'+%'
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = 'MSRP GPL/Fixed'
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = #1056#1077#1085#1090#1072#1073#1077#1083#1100#1085#1086#1089#1090#1100', %'
             end
             item
               CellButtons = <>
@@ -288,17 +308,64 @@ object FormMain: TFormMain
               EditButtons = <>
               FieldName = 'VAT'
               Footers = <>
-              Title.Caption = #1053#1044#1057
+              Title.Caption = #1042#1093#1086#1076'.'#1053#1044#1057
               Width = 48
             end
             item
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
-              FieldName = 'MODIFIED'
+              FieldName = 'PRICEORGNAME'
               Footers = <>
-              Title.Caption = #1048#1079#1084#1077#1085#1077#1085
+              Title.Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082
+              Width = 120
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              FieldName = 'PARTVOLUME'
+              Footers = <>
+              Title.Caption = #1054#1073#1098#1077#1084' '#1077#1076'.'
               Width = 60
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = #1042#1077#1089' '#1077#1076'.'
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = #1054#1073#1098#1077#1084
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              Footers = <>
+              Title.Caption = #1042#1077#1089
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              FieldName = 'PRICEVAL'
+              Footers = <>
+              Title.Caption = #1055#1088#1072#1081#1089'-'#1083#1080#1089#1090
+              Width = 136
+            end
+            item
+              CellButtons = <>
+              DynProps = <>
+              EditButtons = <>
+              FieldName = 'PRICERUB'
+              Footers = <>
+              Title.Caption = #1050#1091#1088#1089#1086#1074#1072#1103
             end>
           object RowDetailData: TRowDetailPanelControlEh
           end
@@ -308,13 +375,14 @@ object FormMain: TFormMain
     object TabSheet4: TTabSheet
       Caption = #1055#1088#1086#1077#1082#1090#1099
       ImageIndex = 4
+      ExplicitWidth = 776
       DesignSize = (
-        776
+        1179
         515)
       object DBGridEh2: TDBGridEh
         Left = 0
         Top = 0
-        Width = 776
+        Width = 1179
         Height = 484
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
@@ -406,13 +474,14 @@ object FormMain: TFormMain
     end
     object TabSheet1: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089#1099
+      ExplicitWidth = 776
       DesignSize = (
-        776
+        1179
         515)
       object DBGridProjectList: TDBGridEh
         Left = 0
         Top = 0
-        Width = 776
+        Width = 1179
         Height = 484
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
@@ -515,13 +584,14 @@ object FormMain: TFormMain
     object TabSheet2: TTabSheet
       Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
       ImageIndex = 2
+      ExplicitWidth = 776
       DesignSize = (
-        776
+        1179
         515)
       object DBGridEh8: TDBGridEh
         Left = 0
         Top = 0
-        Width = 776
+        Width = 1179
         Height = 484
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
@@ -624,8 +694,9 @@ object FormMain: TFormMain
     object TabSheet5: TTabSheet
       Caption = #1050#1091#1088#1089
       ImageIndex = 4
+      ExplicitWidth = 776
       DesignSize = (
-        776
+        1179
         515)
       object DBNavigator6: TDBNavigator
         Left = 0
@@ -639,7 +710,7 @@ object FormMain: TFormMain
       object DBGridEh6: TDBGridEh
         Left = 0
         Top = 0
-        Width = 320
+        Width = 723
         Height = 478
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True

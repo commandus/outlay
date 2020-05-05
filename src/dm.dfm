@@ -1617,6 +1617,7 @@ object dmOutlay: TdmOutlay
     UniDirectional = False
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_SPECIFICATION_ID'
+    Active = True
     DataSource = dslRequest
     Left = 680
     Top = 296
@@ -1682,7 +1683,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICEVAL: TStringField
       FieldKind = fkLookup
       FieldName = 'PRICEVAL'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'VAL'
       KeyFields = 'PRICEID'
@@ -1692,7 +1693,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICEORGNAME: TStringField
       FieldKind = fkLookup
       FieldName = 'PRICEORGNAME'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'ORGNAME'
       KeyFields = 'PRICEID'
@@ -1702,7 +1703,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICEPRICE: TCurrencyField
       FieldKind = fkLookup
       FieldName = 'PRICEPRICE'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'PRICE'
       KeyFields = 'PRICEID'
@@ -1711,7 +1712,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICECURRENCY: TStringField
       FieldKind = fkLookup
       FieldName = 'PRICECURRENCY'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'CURRENCY'
       KeyFields = 'PRICEID'
@@ -1721,7 +1722,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICESRC: TStringField
       FieldKind = fkLookup
       FieldName = 'PRICESRC'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'SRC'
       KeyFields = 'PRICEID'
@@ -1731,7 +1732,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICENOTES: TStringField
       FieldKind = fkLookup
       FieldName = 'PRICENOTES'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'NOTES'
       KeyFields = 'PRICEID'
@@ -1741,7 +1742,7 @@ object dmOutlay: TdmOutlay
     object IBLSpecificationPRICEPARTNAME: TStringField
       FieldKind = fkLookup
       FieldName = 'PRICEPARTNAME'
-      LookupDataSet = IBPriceOrg
+      LookupDataSet = IBSpecPrice
       LookupKeyFields = 'ID'
       LookupResultField = 'PARTNAME'
       KeyFields = 'PRICEID'
@@ -1763,13 +1764,108 @@ object dmOutlay: TdmOutlay
       FieldName = 'COSTDISCOUNT'
       Calculated = True
     end
+    object IBLSpecificationPARTID: TLongWordField
+      FieldKind = fkLookup
+      FieldName = 'PARTID'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'ID'
+      KeyFields = 'PARTNAME'
+      Lookup = True
+    end
+    object IBLSpecificationPARTCATEGORY: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PARTCATEGORY'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'CATEGORY'
+      KeyFields = 'PARTNAME'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPARTVENDOR: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PARTVENDOR'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'VENDOR'
+      KeyFields = 'PARTNAME'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPARTPARTNO: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PARTNO'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'PARTNO'
+      KeyFields = 'PARTNAME'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPARTDESCRIPTION: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PARTDESCRIPTION'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'DESCRIPTION'
+      KeyFields = 'PARTNAME'
+      Size = 1024
+      Lookup = True
+    end
+    object IBLSpecificationPARTMEASUREUNIT: TStringField
+      FieldKind = fkLookup
+      FieldName = 'PARTMEASUREUNIT'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'MEASUREUNIT'
+      KeyFields = 'PARTNAME'
+      Size = 16
+      Lookup = True
+    end
+    object IBLSpecificationPARTWEIGHT: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'PARTWEIGHT'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'WEIGHT'
+      KeyFields = 'PARTNAME'
+      Lookup = True
+    end
+    object IBLSpecificationPARTLENGTH: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'PARTLENGTH'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'LENGTH'
+      KeyFields = 'PARTNAME'
+      Lookup = True
+    end
+    object IBLSpecificationPARTWIDTH: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'PARTWIDTH'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'WIDTH'
+      KeyFields = 'PARTNAME'
+      Lookup = True
+    end
+    object IBLSpecificationPARTHEIGHT: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'PARTHEIGHT'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'HEIGHT'
+      KeyFields = 'PARTNAME'
+      Lookup = True
+    end
   end
   object dslSpecification: TDataSource
     DataSet = IBLSpecification
     Left = 684
     Top = 360
   end
-  object IBPriceOrg: TIBDataSet
+  object IBSpecPrice: TIBDataSet
     Database = IBDatabase
     Transaction = IBTransaction
     BufferChunks = 1000
@@ -1857,11 +1953,131 @@ object dmOutlay: TdmOutlay
       Origin = '"PRICE"."NOTES"'
       Size = 4096
     end
-    object IBPriceOrgVAL: TIBStringField
+    object IBSpecPriceVAL: TIBStringField
       FieldName = 'VAL'
       ProviderFlags = []
       ReadOnly = True
       Size = 2074
+    end
+  end
+  object IBSpecPart: TIBDataSet
+    Database = IBDatabase
+    Transaction = IBTransaction
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from PART'
+      'where'
+      '  ID = :OLD_ID')
+    InsertSQL.Strings = (
+      'insert into PART'
+      
+        '  (CATEGORY, DESCRIPTION, HEIGHT, ID, LENGTH, MEASUREUNIT, NAME,' +
+        ' PARTNO, '
+      '   VENDOR, WEIGHT, WIDTH)'
+      'values'
+      
+        '  (:CATEGORY, :DESCRIPTION, :HEIGHT, :ID, :LENGTH, :MEASUREUNIT,' +
+        ' :NAME, '
+      '   :PARTNO, :VENDOR, :WEIGHT, :WIDTH)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  ID,'
+      '  CATEGORY,'
+      '  VENDOR,'
+      '  PARTNO,'
+      '  NAME,'
+      '  DESCRIPTION,'
+      '  MEASUREUNIT,'
+      '  CREATED,'
+      '  MODIFIED,'
+      '  WEIGHT,'
+      '  WIDTH,'
+      '  HEIGHT,'
+      '  LENGTH'
+      'from PART '
+      'where'
+      '  ID = :ID')
+    SelectSQL.Strings = (
+      
+        'select CATEGORY, DESCRIPTION, HEIGHT, ID, LENGTH, MEASUREUNIT, N' +
+        'AME, PARTNO, VENDOR, WEIGHT, WIDTH from PART')
+    ModifySQL.Strings = (
+      'update PART'
+      'set'
+      '  CATEGORY = :CATEGORY,'
+      '  DESCRIPTION = :DESCRIPTION,'
+      '  HEIGHT = :HEIGHT,'
+      '  ID = :ID,'
+      '  LENGTH = :LENGTH,'
+      '  MEASUREUNIT = :MEASUREUNIT,'
+      '  NAME = :NAME,'
+      '  PARTNO = :PARTNO,'
+      '  VENDOR = :VENDOR,'
+      '  WEIGHT = :WEIGHT,'
+      '  WIDTH = :WIDTH'
+      'where'
+      '  ID = :OLD_ID')
+    ParamCheck = True
+    UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PRICE_ID'
+    Active = True
+    Left = 736
+    Top = 416
+    object IBSpecPartID: TLargeintField
+      FieldName = 'ID'
+      Origin = '"PART"."ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object IBSpecPartPARTNO: TIBStringField
+      FieldName = 'PARTNO'
+      Origin = '"PART"."PARTNO"'
+      Required = True
+      Size = 1024
+    end
+    object IBSpecPartNAME: TIBStringField
+      FieldName = 'NAME'
+      Origin = '"PART"."NAME"'
+      Required = True
+      Size = 1024
+    end
+    object IBSpecPartCATEGORY: TIBStringField
+      FieldName = 'CATEGORY'
+      Origin = '"PART"."CATEGORY"'
+      Size = 1024
+    end
+    object IBSpecPartVENDOR: TIBStringField
+      FieldName = 'VENDOR'
+      Origin = '"PART"."VENDOR"'
+      Size = 1024
+    end
+    object IBSpecPartDESCRIPTION: TIBStringField
+      FieldName = 'DESCRIPTION'
+      Origin = '"PART"."DESCRIPTION"'
+      Size = 4096
+    end
+    object IBSpecPartLENGTH: TFloatField
+      FieldName = 'LENGTH'
+      Origin = '"PART"."LENGTH"'
+    end
+    object IBSpecPartWIDTH: TFloatField
+      FieldName = 'WIDTH'
+      Origin = '"PART"."WIDTH"'
+    end
+    object IBSpecPartHEIGHT: TFloatField
+      FieldName = 'HEIGHT'
+      Origin = '"PART"."HEIGHT"'
+    end
+    object IBSpecPartWEIGHT: TFloatField
+      FieldName = 'WEIGHT'
+      Origin = '"PART"."WEIGHT"'
+    end
+    object IBSpecPartMEASUREUNIT: TIBStringField
+      FieldName = 'MEASUREUNIT'
+      Origin = '"PART"."MEASUREUNIT"'
+      Size = 16
     end
   end
 end

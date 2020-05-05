@@ -158,7 +158,7 @@ type
     IBStringField12: TIBStringField;
     IBStringField13: TIBStringField;
     dslSpecification: TDataSource;
-    IBPriceOrg: TIBDataSet;
+    IBSpecPrice: TIBDataSet;
     LargeintField9: TLargeintField;
     IBStringField14: TIBStringField;
     IBStringField15: TIBStringField;
@@ -179,7 +179,7 @@ type
     IBSpecificationTAG: TIBStringField;
     IBSpecificationVAT: TLargeintField;
     IBLSpecificationPRICEVAL: TStringField;
-    IBPriceOrgVAL: TIBStringField;
+    IBSpecPriceVAL: TIBStringField;
     IBLSpecificationPRICEORGNAME: TStringField;
     IBLSpecificationPRICEPRICE: TCurrencyField;
     IBLSpecificationPRICECURRENCY: TStringField;
@@ -187,6 +187,19 @@ type
     IBCurrencyISLOCAL: TLargeintField;
     IBLSpecificationCOSTLIST: TCurrencyField;
     IBLSpecificationCOSTDISCOUNT: TCurrencyField;
+    IBSpecPart: TIBDataSet;
+    IBSpecPartCATEGORY: TIBStringField;
+    IBSpecPartDESCRIPTION: TIBStringField;
+    IBSpecPartHEIGHT: TFloatField;
+    IBSpecPartID: TLargeintField;
+    IBSpecPartLENGTH: TFloatField;
+    IBSpecPartMEASUREUNIT: TIBStringField;
+    IBSpecPartNAME: TIBStringField;
+    IBSpecPartPARTNO: TIBStringField;
+    IBSpecPartVENDOR: TIBStringField;
+    IBSpecPartWEIGHT: TFloatField;
+    IBSpecPartWIDTH: TFloatField;
+    IBLSpecificationPARTID: TLongWordField;
     procedure DataModuleCreate(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
     procedure IBLProjectAfterInsert(DataSet: TDataSet);
