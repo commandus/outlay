@@ -20,11 +20,13 @@
     Top = 0
     Width = 624
     Height = 461
-    ActivePage = TabSheet9
+    ActivePage = TabSheet12
     Align = alClient
     MultiLine = True
     TabOrder = 0
     TabPosition = tpBottom
+    ExplicitLeft = -64
+    ExplicitTop = 8
     object TabSheet13: TTabSheet
       Caption = #1055#1088#1072#1081#1089'-'#1083#1080#1089#1090
       ImageIndex = 14
@@ -108,6 +110,13 @@
             Footers = <>
             Title.Caption = #1057#1089#1099#1083#1082#1072
             Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'SRC'
+            Footers = <>
           end>
         object RowDetailData: TRowDetailPanelControlEh
         end
@@ -191,7 +200,7 @@
             FieldName = 'DESCRIPTION'
             Footers = <>
             Title.Caption = #1054#1087#1080#1089#1072#1085#1080#1077
-            Width = 100
+            Width = 49
           end
           item
             CellButtons = <>
@@ -204,6 +213,15 @@
             LookupParams.LookupDisplayFieldName = 'NAME'
             LookupParams.LookupKeyFieldNames = 'NAME'
             Title.Caption = #1045#1076'.'#1080#1079#1084'.'
+            Width = 45
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'VOL'
+            Footers = <>
+            Title.Caption = #1054#1073#1098#1077#1084', '#1084'3'
           end
           item
             CellButtons = <>
@@ -211,8 +229,8 @@
             EditButtons = <>
             FieldName = 'WEIGHT'
             Footers = <>
-            Title.Caption = #1042#1077#1089
-            Width = 32
+            Title.Caption = #1042#1077#1089', '#1082#1075
+            Width = 57
           end
           item
             CellButtons = <>
@@ -333,10 +351,10 @@
             CellButtons = <>
             DynProps = <>
             EditButtons = <>
-            FieldName = 'MODIFIED'
+            FieldName = 'DISCOUNT'
             Footers = <>
-            Title.Caption = #1048#1079#1084#1077#1085#1077#1085
-            Width = 60
+            Title.Caption = #1053#1072#1094#1077#1085#1082#1072
+            Width = 32
           end>
         object RowDetailData: TRowDetailPanelControlEh
         end
@@ -441,15 +459,6 @@
             CellButtons = <>
             DynProps = <>
             EditButtons = <>
-            FieldName = 'MODIFIED'
-            Footers = <>
-            Title.Caption = #1048#1079#1084#1077#1085#1077#1085
-            Width = 58
-          end
-          item
-            CellButtons = <>
-            DynProps = <>
-            EditButtons = <>
             FieldName = 'VAT'
             Footers = <>
             LookupParams.KeyFieldNames = 'VAT'
@@ -458,6 +467,15 @@
             LookupParams.LookupKeyFieldNames = 'VAL'
             Title.Caption = #1053#1044#1057
             Width = 40
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'DISCOUNT'
+            Footers = <>
+            Title.Caption = #1053#1072#1094#1077#1085#1082#1072
+            Width = 32
           end>
         object RowDetailData: TRowDetailPanelControlEh
         end

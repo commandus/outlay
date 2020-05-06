@@ -44,8 +44,6 @@ type
     IBRequestPROJECTNAME: TIBStringField;
     IBRequestNAME: TIBStringField;
     IBRequestDESCRIPTION: TIBStringField;
-    IBRequestCREATED: TDateTimeField;
-    IBRequestMODIFIED: TDateTimeField;
     IBRequestSALETYPE: TIBStringField;
     IBRequestORG: TIBStringField;
     IBRequestVAT: TLargeintField;
@@ -86,8 +84,6 @@ type
     IBPartNAME: TIBStringField;
     IBPartDESCRIPTION: TIBStringField;
     IBPartMEASUREUNIT: TIBStringField;
-    IBPartCREATED: TDateTimeField;
-    IBPartMODIFIED: TDateTimeField;
     IBPartWEIGHT: TFloatField;
     IBPartWIDTH: TFloatField;
     IBPartHEIGHT: TFloatField;
@@ -102,11 +98,11 @@ type
     ibPriceSRC: TIBStringField;
     ibPriceNOTES: TIBStringField;
     dsPrice: TDataSource;
-    IBRequestCurrencyRate: TIBDataSet;
-    IBRequestCurrencyRateID: TLargeintField;
-    IBRequestCurrencyRateREQUESTID: TLargeintField;
-    IBRequestCurrencyRateCURRENCY: TIBStringField;
-    IBRequestCurrencyRateVAL: TFloatField;
+    IBLRequestCurrencyRate: TIBDataSet;
+    IBLRequestCurrencyRateID: TLargeintField;
+    IBLRequestCurrencyRateREQUESTID: TLargeintField;
+    IBLRequestCurrencyRateCURRENCY: TIBStringField;
+    IBLRequestCurrencyRateVAL: TFloatField;
     dsRequestCurrencyRate: TDataSource;
     IBSpecification: TIBDataSet;
     dsSpecification: TDataSource;
@@ -136,8 +132,6 @@ type
     IBStringField5: TIBStringField;
     IBStringField6: TIBStringField;
     IBStringField7: TIBStringField;
-    DateTimeField3: TDateTimeField;
-    DateTimeField4: TDateTimeField;
     IBStringField8: TIBStringField;
     IBStringField9: TIBStringField;
     LargeintField3: TLargeintField;
@@ -200,17 +194,31 @@ type
     IBSpecPartWEIGHT: TFloatField;
     IBSpecPartWIDTH: TFloatField;
     IBLSpecificationPARTID: TLongWordField;
+    IBLSpecificationPARTVOL: TFloatField;
+    IBSpecPartVOL: TFloatField;
+    IBLSpecificationPARTVOLSUM: TFloatField;
+    IBLSpecificationPARTWEIGHTSUM: TFloatField;
+    IBPartVOL: TFloatField;
+    IBRequestDISCOUNT: TFloatField;
+    IBProjectDISCOUNT: TFloatField;
+    IBLRequestDISCOUNT: TFloatField;
+    IBLProjectDISCOUNT: TFloatField;
+    IBLSpecificationPRICENDISCOUNT: TCurrencyField;
+    IBLSpecificationCOSTNDISCOUNT: TCurrencyField;
     procedure DataModuleCreate(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
     procedure IBLProjectAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationCalcFields(DataSet: TDataSet);
+    procedure IBLRequestCurrencyRateAfterInsert(DataSet: TDataSet);
   private
     function getStyles: TStringList;
     function GetSelectedProjectName: String;
     function GetSelectedProjectVAT: Int64;
+    function GetSelectedProjectDiscount: Int64;
     function GetSelectedRequestVAT: Int64;
     function GetSelectedRequestName: String;
+    function GetSelectedRequestDiscount: Int64;
     function GetSelectedSpecificationPartName: String;
     function GetDefaultProjectSellerOrg(): String;
     function GetDefaultProjectStage(): String;
@@ -231,7 +239,8 @@ type
     procedure loadSettings();
     procedure saveSettings();
     function connectionString: AnsiString;
-    function getRate(const curr: string): Double;
+    function getCurrencyRateDefault(const curr: string): Double;
+    function getCurrencyRate(const curr: string): Double;
     class procedure ActivateDbControls(component: TComponent);
   end;
 
@@ -329,6 +338,8 @@ begin
   begin
     DataSet.FieldByName('PROJECTNAME').AsString:= GetSelectedProjectName();
     DataSet.FieldByName('VAT').AsLargeInt:= GetSelectedProjectVAT();
+    DataSet.FieldByName('DISCOUNT').AsLargeInt:= GetSelectedProjectDiscount();
+    IBLRequestCurrencyRate.Refresh;
   end;
 end;
 
@@ -337,11 +348,26 @@ begin
   if (DataSet.State in [dsEdit, dsInsert]) then
   begin
     DataSet.FieldByName('REQUESTID').AsLongWord:= GetSelectedRequestId();
-     DataSet.FieldByName('VAT').AsLargeInt:= GetSelectedRequestVAT();
+    DataSet.FieldByName('VAT').AsLargeInt:= GetSelectedRequestVAT();
+    DataSet.FieldByName('DISCOUNT').AsLargeInt:= GetSelectedRequestDiscount();
   end;
 end;
 
-function TdmOutlay.getRate(const curr: string): Double;
+function TdmOutlay.getCurrencyRate(const curr: string): Double;
+begin
+  IBLRequestCurrencyRate.First;
+  while not IBLRequestCurrencyRate.Eof do
+  begin
+    if curr = IBLRequestCurrencyRate.FieldByName('CURRENCY').AsString  then begin
+      Result:= IBLRequestCurrencyRate.FieldByName('VAL').AsCurrency;
+      Exit;
+    end;
+    IBLRequestCurrencyRate.Next;
+  end;
+  Result:= getCurrencyRateDefault(curr);
+end;
+
+function TdmOutlay.getCurrencyRateDefault(const curr: string): Double;
 begin
   IBCurrency.First;
   while not IBCurrency.Eof do
@@ -360,21 +386,35 @@ var
   p, price: Currency;
   c: String;
   rate: double;
-  qty: double;
+  qty, vol, weight, discount: double;
 begin
   p:= DataSet.FieldByName('PRICEPRICE').AsCurrency;
   if (Abs(p) < 0.001) then Exit;
   c:= DataSet.FieldByName('PRICECURRENCY').AsString;
-  rate:= getRate(c);
+  rate:= getCurrencyRate(c);
   price:= rate * p;
+  discount:= DataSet.FieldByName('DISCOUNT').AsCurrency;
+  DataSet.FieldByName('PRICENDISCOUNT').AsCurrency:= price + (price * discount / 100);
   DataSet.FieldByName('PRICERUB').AsCurrency:= price;
 
   qty:= DataSet.FieldByName('QTY').AsCurrency;
   if (Abs(qty) > 0.001) then begin
     DataSet.FieldByName('COSTLIST').AsCurrency:= price * qty;
+    DataSet.FieldByName('COSTNDISCOUNT').AsCurrency:= qty * price + (price * discount / 100);
+
+    vol:= DataSet.FieldByName('PARTVOL').AsFloat;
+    weight:= DataSet.FieldByName('PARTWEIGHT').AsFloat;
+
+    DataSet.FieldByName('PARTVOLSUM').AsFloat:= vol * qty;
+    DataSet.FieldByName('PARTWEIGHTSUM').AsFloat:= weight * qty;
   end else begin
     // DataSet.FieldByName('COSTLIST').Clear;
   end;
+end;
+
+procedure TdmOutlay.IBLRequestCurrencyRateAfterInsert(DataSet: TDataSet);
+begin
+  Dataset.FieldByName('REQUESTID').AsLongWord:= IBLRequest.FieldByName('ID').AsLongWord;
 end;
 
 class procedure TdmOutlay.loadLastStyle();
@@ -451,9 +491,19 @@ begin
   Result:= IBLProject.FieldByName('VAT').AsLargeInt;
 end;
 
+function TdmOutlay.GetSelectedProjectDiscount: Int64;
+begin
+  Result:= IBLProject.FieldByName('DISCOUNT').AsLargeInt;
+end;
+
 function TdmOutlay.GetSelectedRequestVAT: Int64;
 begin
   Result:= IBLRequest.FieldByName('VAT').AsLargeInt;
+end;
+
+function TdmOutlay.GetSelectedRequestDiscount: Int64;
+begin
+  Result:= IBLRequest.FieldByName('DISCOUNT').AsLargeInt;
 end;
 
 function TdmOutlay.GetSelectedRequestName: String;

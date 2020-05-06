@@ -5,8 +5,8 @@ object dmOutlay: TdmOutlay
   Width = 821
   object dsProject: TDataSource
     DataSet = IBProject
-    Left = 96
-    Top = 240
+    Left = 56
+    Top = 232
   end
   object dsOrgType: TDataSource
     DataSet = IBOrgType
@@ -35,8 +35,8 @@ object dmOutlay: TdmOutlay
   end
   object dsRequest: TDataSource
     DataSet = IBRequest
-    Left = 252
-    Top = 240
+    Left = 116
+    Top = 232
   end
   object dsOrg: TDataSource
     DataSet = IBOrg
@@ -123,21 +123,24 @@ object dmOutlay: TdmOutlay
       '  NAME = :OLD_NAME')
     InsertSQL.Strings = (
       'insert into PROJECT'
-      '  (NAME, SELLERORG, DESCRIPTION, VAT, STAGE)'
+      '  (NAME, SELLERORG, DESCRIPTION, VAT, STAGE, DISCOUNT)'
       'values'
-      '  (:NAME, :SELLERORG, :DESCRIPTION, :VAT, :STAGE)')
+      '  (:NAME, :SELLERORG, :DESCRIPTION, :VAT, :STAGE, :DISCOUNT)')
     RefreshSQL.Strings = (
       'Select '
       '  NAME,'
       '  SELLERORG,'
       '  DESCRIPTION,'
+      '  CREATED,'
+      '  MODIFIED,'
       '  VAT,'
-      '  STAGE'
+      '  STAGE,'
+      '  DISCOUNT'
       'from PROJECT '
       'where'
       '  NAME = :NAME')
     SelectSQL.Strings = (
-      'select  NAME,SELLERORG,DESCRIPTION,VAT, STAGE '
+      'select  NAME,SELLERORG,DESCRIPTION,VAT, STAGE,DISCOUNT '
       'from "PROJECT" where /*Filter*/ 1=1'
       '')
     ModifySQL.Strings = (
@@ -147,14 +150,15 @@ object dmOutlay: TdmOutlay
       '  SELLERORG = :SELLERORG,'
       '  DESCRIPTION = :DESCRIPTION,'
       '  VAT = :VAT,'
-      '  STAGE = :STAGE'
+      '  STAGE = :STAGE,'
+      '  DISCOUNT = :DISCOUNT'
       'where'
       '  NAME = :OLD_NAME')
     ParamCheck = True
     UniDirectional = False
     Active = True
-    Left = 96
-    Top = 192
+    Left = 56
+    Top = 184
     object IBProjectNAME: TIBStringField
       FieldName = 'NAME'
       Origin = '"PROJECT"."NAME"'
@@ -180,6 +184,10 @@ object dmOutlay: TdmOutlay
       FieldName = 'STAGE'
       Origin = '"PROJECT"."STAGE"'
       Size = 16
+    end
+    object IBProjectDISCOUNT: TFloatField
+      FieldName = 'DISCOUNT'
+      Origin = '"PROJECT"."DISCOUNT"'
     end
   end
   object IBPerson: TIBDataSet
@@ -308,14 +316,13 @@ object dmOutlay: TdmOutlay
     InsertSQL.Strings = (
       'insert into REQUEST'
       
-        '  (ID, PROJECTNAME, NAME, DESCRIPTION, CREATED, MODIFIED, SALETY' +
-        'PE, ORG, '
-      '   VAT, STAGE)'
+        '  (ID, PROJECTNAME, NAME, DESCRIPTION, SALETYPE, ORG, VAT, STAGE' +
+        ', DISCOUNT)'
       'values'
       
-        '  (:ID, :PROJECTNAME, :NAME, :DESCRIPTION, :CREATED, :MODIFIED, ' +
-        ':SALETYPE, '
-      '   :ORG, :VAT, :STAGE)')
+        '  (:ID, :PROJECTNAME, :NAME, :DESCRIPTION, :SALETYPE, :ORG, :VAT' +
+        ', :STAGE, '
+      '   :DISCOUNT)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -327,13 +334,14 @@ object dmOutlay: TdmOutlay
       '  SALETYPE,'
       '  ORG,'
       '  VAT,'
-      '  STAGE'
+      '  STAGE,'
+      '  DISCOUNT'
       'from REQUEST '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
-      'select ID,STAGE,PROJECTNAME,NAME,DESCRIPTION,CREATED,MODIFIED,'
-      'SALETYPE,ORG,VAT'
+      'select ID,STAGE,PROJECTNAME,NAME,DESCRIPTION,'
+      'SALETYPE,ORG,VAT,DISCOUNT'
       'from REQUEST')
     ModifySQL.Strings = (
       'update REQUEST'
@@ -342,12 +350,11 @@ object dmOutlay: TdmOutlay
       '  PROJECTNAME = :PROJECTNAME,'
       '  NAME = :NAME,'
       '  DESCRIPTION = :DESCRIPTION,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED,'
       '  SALETYPE = :SALETYPE,'
       '  ORG = :ORG,'
       '  VAT = :VAT,'
-      '  STAGE = :STAGE'
+      '  STAGE = :STAGE,'
+      '  DISCOUNT = :DISCOUNT'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
@@ -355,8 +362,8 @@ object dmOutlay: TdmOutlay
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_REQUEST_ID'
     Active = True
-    Left = 252
-    Top = 191
+    Left = 116
+    Top = 183
     object IBRequestID: TLargeintField
       FieldName = 'ID'
       Origin = '"REQUEST"."ID"'
@@ -378,14 +385,6 @@ object dmOutlay: TdmOutlay
       Origin = '"REQUEST"."DESCRIPTION"'
       Size = 4096
     end
-    object IBRequestCREATED: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"REQUEST"."CREATED"'
-    end
-    object IBRequestMODIFIED: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"REQUEST"."MODIFIED"'
-    end
     object IBRequestSALETYPE: TIBStringField
       FieldName = 'SALETYPE'
       Origin = '"REQUEST"."SALETYPE"'
@@ -404,6 +403,10 @@ object dmOutlay: TdmOutlay
       FieldName = 'STAGE'
       Origin = '"REQUEST"."STAGE"'
       Size = 16
+    end
+    object IBRequestDISCOUNT: TFloatField
+      FieldName = 'DISCOUNT'
+      Origin = '"REQUEST"."DISCOUNT"'
     end
   end
   object IBOrgType: TIBDataSet
@@ -794,13 +797,13 @@ object dmOutlay: TdmOutlay
       'insert into PART'
       
         '  (ID, CATEGORY, VENDOR, PARTNO, NAME, DESCRIPTION, MEASUREUNIT,' +
-        ' CREATED, '
-      '   MODIFIED, WEIGHT, WIDTH, HEIGHT, LENGTH)'
+        ' VOL, WEIGHT, '
+      '   WIDTH, HEIGHT, LENGTH)'
       'values'
       
         '  (:ID, :CATEGORY, :VENDOR, :PARTNO, :NAME, :DESCRIPTION, :MEASU' +
         'REUNIT, '
-      '   :CREATED, :MODIFIED, :WEIGHT, :WIDTH, :HEIGHT, :LENGTH)')
+      '   :VOL, :WEIGHT, :WIDTH, :HEIGHT, :LENGTH)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -815,14 +818,15 @@ object dmOutlay: TdmOutlay
       '  WEIGHT,'
       '  WIDTH,'
       '  HEIGHT,'
-      '  LENGTH'
+      '  LENGTH,'
+      '  VOL'
       'from PART '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
       
-        'select ID,CATEGORY,VENDOR,PARTNO,NAME,DESCRIPTION,MEASUREUNIT,CR' +
-        'EATED,MODIFIED,WEIGHT,WIDTH,HEIGHT,"LENGTH"'
+        'select ID,CATEGORY,VENDOR,PARTNO,NAME,DESCRIPTION,MEASUREUNIT,VO' +
+        'L,WEIGHT,WIDTH,HEIGHT,"LENGTH"'
       'from PART')
     ModifySQL.Strings = (
       'update PART'
@@ -834,8 +838,7 @@ object dmOutlay: TdmOutlay
       '  NAME = :NAME,'
       '  DESCRIPTION = :DESCRIPTION,'
       '  MEASUREUNIT = :MEASUREUNIT,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED,'
+      '  VOL = :VOL,'
       '  WEIGHT = :WEIGHT,'
       '  WIDTH = :WIDTH,'
       '  HEIGHT = :HEIGHT,'
@@ -887,13 +890,9 @@ object dmOutlay: TdmOutlay
       Origin = '"PART"."MEASUREUNIT"'
       Size = 16
     end
-    object IBPartCREATED: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"PART"."CREATED"'
-    end
-    object IBPartMODIFIED: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"PART"."MODIFIED"'
+    object IBPartVOL: TFloatField
+      FieldName = 'VOL'
+      Origin = '"PART"."VOL"'
     end
     object IBPartWEIGHT: TFloatField
       FieldName = 'WEIGHT'
@@ -928,9 +927,9 @@ object dmOutlay: TdmOutlay
       '  ID = :OLD_ID')
     InsertSQL.Strings = (
       'insert into PRICE'
-      '  (ID, PARTNAME, ORGNAME, CURRENCY, PRICE, SRC, NOTES)'
+      '  (PARTNAME, ORGNAME, CURRENCY, PRICE, SRC, NOTES)'
       'values'
-      '  (:ID, :PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :SRC, :NOTES)')
+      '  (:PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :SRC, :NOTES)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -946,14 +945,11 @@ object dmOutlay: TdmOutlay
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
-      
-        'select ID,PARTNAME,ORGNAME,CURRENCY,PRICE,CREATED,MODIFIED,SRC,N' +
-        'OTES'
+      'select ID,PARTNAME,ORGNAME,CURRENCY,PRICE,SRC,NOTES'
       'from PRICE')
     ModifySQL.Strings = (
       'update PRICE'
       'set'
-      '  ID = :ID,'
       '  PARTNAME = :PARTNAME,'
       '  ORGNAME = :ORGNAME,'
       '  CURRENCY = :CURRENCY,'
@@ -1010,44 +1006,75 @@ object dmOutlay: TdmOutlay
     Left = 620
     Top = 112
   end
-  object IBRequestCurrencyRate: TIBDataSet
+  object IBLRequestCurrencyRate: TIBDataSet
     Database = IBDatabase
     Transaction = IBTransaction
+    AfterInsert = IBLRequestCurrencyRateAfterInsert
     BufferChunks = 1000
     CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from REQUESTCURRENCYRATE'
+      'where'
+      '  ID = :OLD_ID')
+    InsertSQL.Strings = (
+      'insert into REQUESTCURRENCYRATE'
+      '  (ID, REQUESTID, CURRENCY, VAL)'
+      'values'
+      '  (:ID, :REQUESTID, :CURRENCY, :VAL)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  ID,'
+      '  REQUESTID,'
+      '  CURRENCY,'
+      '  VAL'
+      'from REQUESTCURRENCYRATE '
+      'where'
+      '  ID = :ID')
     SelectSQL.Strings = (
-      'select ID, REQUESTID, CURRENCY, VAL from REQUESTCURRENCYRATE')
+      'select ID, REQUESTID, CURRENCY, VAL from REQUESTCURRENCYRATE '
+      'WHERE REQUESTID = :ID')
+    ModifySQL.Strings = (
+      'update REQUESTCURRENCYRATE'
+      'set'
+      '  ID = :ID,'
+      '  REQUESTID = :REQUESTID,'
+      '  CURRENCY = :CURRENCY,'
+      '  VAL = :VAL'
+      'where'
+      '  ID = :OLD_ID')
     ParamCheck = True
     UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_REQUESTCURRENCYRATE_ID'
     Active = True
-    DataSource = dsRequest
-    Left = 248
-    Top = 296
-    object IBRequestCurrencyRateID: TLargeintField
+    DataSource = dslRequest
+    Left = 528
+    Top = 312
+    object IBLRequestCurrencyRateID: TLargeintField
       FieldName = 'ID'
       Origin = '"REQUESTCURRENCYRATE"."ID"'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
-    object IBRequestCurrencyRateREQUESTID: TLargeintField
+    object IBLRequestCurrencyRateREQUESTID: TLargeintField
       FieldName = 'REQUESTID'
       Origin = '"REQUESTCURRENCYRATE"."REQUESTID"'
       Required = True
     end
-    object IBRequestCurrencyRateCURRENCY: TIBStringField
+    object IBLRequestCurrencyRateCURRENCY: TIBStringField
       FieldName = 'CURRENCY'
       Origin = '"REQUESTCURRENCYRATE"."CURRENCY"'
       Size = 1024
     end
-    object IBRequestCurrencyRateVAL: TFloatField
+    object IBLRequestCurrencyRateVAL: TFloatField
       FieldName = 'VAL'
       Origin = '"REQUESTCURRENCYRATE"."VAL"'
     end
   end
   object dsRequestCurrencyRate: TDataSource
-    DataSet = IBRequestCurrencyRate
-    Left = 252
-    Top = 344
+    DataSet = IBLRequestCurrencyRate
+    Left = 532
+    Top = 360
   end
   object IBSpecification: TIBDataSet
     Database = IBDatabase
@@ -1061,14 +1088,14 @@ object dmOutlay: TdmOutlay
     InsertSQL.Strings = (
       'insert into SPECIFICATION'
       
-        '  (REQUESTID, LINENO, PARTNAME, QTY, PRICEID, PRICE, DISCOUNT, V' +
-        'AT, TAG, '
-      '   NOTES)'
+        '  (DISCOUNT, LINENO, NOTES, PARTNAME, PRICE, PRICEID, QTY, REQUE' +
+        'STID, TAG, '
+      '   VAT)'
       'values'
       
-        '  (:REQUESTID, :LINENO, :PARTNAME, :QTY, :PRICEID, :PRICE, :DISC' +
-        'OUNT, :VAT, '
-      '   :TAG, :NOTES)')
+        '  (:DISCOUNT, :LINENO, :NOTES, :PARTNAME, :PRICE, :PRICEID, :QTY' +
+        ', :REQUESTID, '
+      '   :TAG, :VAT)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1096,24 +1123,25 @@ object dmOutlay: TdmOutlay
     ModifySQL.Strings = (
       'update SPECIFICATION'
       'set'
-      '  REQUESTID = :REQUESTID,'
-      '  LINENO = :LINENO,'
-      '  PARTNAME = :PARTNAME,'
-      '  QTY = :QTY,'
-      '  PRICEID = :PRICEID,'
-      '  PRICE = :PRICE,'
       '  DISCOUNT = :DISCOUNT,'
-      '  VAT = :VAT,'
+      '  LINENO = :LINENO,'
+      '  NOTES = :NOTES,'
+      '  PARTNAME = :PARTNAME,'
+      '  PRICE = :PRICE,'
+      '  PRICEID = :PRICEID,'
+      '  QTY = :QTY,'
+      '  REQUESTID = :REQUESTID,'
       '  TAG = :TAG,'
-      '  NOTES = :NOTES'
+      '  VAT = :VAT'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
     UniDirectional = False
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_SPECIFICATION_ID'
-    Left = 344
-    Top = 192
+    Active = True
+    Left = 208
+    Top = 184
     object IBSpecificationID: TLargeintField
       FieldName = 'ID'
       Origin = '"SPECIFICATION"."ID"'
@@ -1176,8 +1204,8 @@ object dmOutlay: TdmOutlay
   end
   object dsSpecification: TDataSource
     DataSet = IBSpecification
-    Left = 348
-    Top = 248
+    Left = 212
+    Top = 240
   end
   object IBCurrency: TIBDataSet
     Database = IBDatabase
@@ -1333,8 +1361,8 @@ object dmOutlay: TdmOutlay
     ParamCheck = True
     UniDirectional = False
     Active = True
-    Left = 576
-    Top = 192
+    Left = 264
+    Top = 184
     object IBStageNAME: TIBStringField
       FieldName = 'NAME'
       Origin = '"STAGE"."NAME"'
@@ -1357,33 +1385,28 @@ object dmOutlay: TdmOutlay
     DeleteSQL.Strings = (
       'delete from PROJECT'
       'where'
-      '  NAME = :OLD_NAME and'
-      '  SELLERORG = :OLD_SELLERORG and'
-      '  DESCRIPTION = :OLD_DESCRIPTION and'
-      '  VAT = :OLD_VAT and'
-      '  STAGE = :OLD_STAGE')
+      '  NAME = :OLD_NAME')
     InsertSQL.Strings = (
       'insert into PROJECT'
-      '  (NAME, SELLERORG, DESCRIPTION, VAT, STAGE)'
+      '  (NAME, SELLERORG, DESCRIPTION, VAT, STAGE, DISCOUNT)'
       'values'
-      '  (:NAME, :SELLERORG, :DESCRIPTION, :VAT, :STAGE)')
+      '  (:NAME, :SELLERORG, :DESCRIPTION, :VAT, :STAGE, :DISCOUNT)')
     RefreshSQL.Strings = (
       'Select '
       '  NAME,'
       '  SELLERORG,'
       '  DESCRIPTION,'
+      '  CREATED,'
+      '  MODIFIED,'
       '  VAT,'
-      '  STAGE'
+      '  STAGE,'
+      '  DISCOUNT'
       'from PROJECT '
       'where'
-      '  NAME = :NAME and'
-      '  SELLERORG = :SELLERORG and'
-      '  DESCRIPTION = :DESCRIPTION and'
-      '  VAT = :VAT and'
-      '  STAGE = :STAGE')
+      '  NAME = :NAME')
     SelectSQL.Strings = (
-      'select  NAME,SELLERORG,DESCRIPTION,CREATED,MODIFIED,VAT, STAGE '
-      'from "PROJECT" where /*Filter*/ 1=1'
+      'select  NAME,SELLERORG,DESCRIPTION,VAT, STAGE, DISCOUNT'
+      'from "PROJECT"'
       '')
     ModifySQL.Strings = (
       'update PROJECT'
@@ -1392,18 +1415,15 @@ object dmOutlay: TdmOutlay
       '  SELLERORG = :SELLERORG,'
       '  DESCRIPTION = :DESCRIPTION,'
       '  VAT = :VAT,'
-      '  STAGE = :STAGE'
+      '  STAGE = :STAGE,'
+      '  DISCOUNT = :DISCOUNT'
       'where'
-      '  NAME = :OLD_NAME and'
-      '  SELLERORG = :OLD_SELLERORG and'
-      '  DESCRIPTION = :OLD_DESCRIPTION and'
-      '  VAT = :OLD_VAT and'
-      '  STAGE = :OLD_STAGE')
+      '  NAME = :OLD_NAME')
     ParamCheck = True
     UniDirectional = False
     Active = True
-    Left = 512
-    Top = 296
+    Left = 432
+    Top = 184
     object IBStringField1: TIBStringField
       FieldName = 'NAME'
       Origin = '"PROJECT"."NAME"'
@@ -1430,6 +1450,10 @@ object dmOutlay: TdmOutlay
       Origin = '"PROJECT"."STAGE"'
       Size = 16
     end
+    object IBLProjectDISCOUNT: TFloatField
+      FieldName = 'DISCOUNT'
+      Origin = '"PROJECT"."DISCOUNT"'
+    end
   end
   object IBLRequest: TIBDataSet
     Database = IBDatabase
@@ -1444,14 +1468,13 @@ object dmOutlay: TdmOutlay
     InsertSQL.Strings = (
       'insert into REQUEST'
       
-        '  (ID, PROJECTNAME, NAME, DESCRIPTION, CREATED, MODIFIED, SALETY' +
-        'PE, ORG, '
-      '   VAT, STAGE)'
+        '  (ID, STAGE, PROJECTNAME, NAME, DESCRIPTION, SALETYPE, ORG, VAT' +
+        ', DISCOUNT)'
       'values'
       
-        '  (:ID, :PROJECTNAME, :NAME, :DESCRIPTION, :CREATED, :MODIFIED, ' +
-        ':SALETYPE, '
-      '   :ORG, :VAT, :STAGE)')
+        '  (:ID, :STAGE, :PROJECTNAME, :NAME, :DESCRIPTION, :SALETYPE, :O' +
+        'RG, :VAT, '
+      '   :DISCOUNT)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1463,27 +1486,27 @@ object dmOutlay: TdmOutlay
       '  SALETYPE,'
       '  ORG,'
       '  VAT,'
-      '  STAGE'
+      '  STAGE,'
+      '  DISCOUNT'
       'from REQUEST '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
-      'select ID,STAGE,PROJECTNAME,NAME,DESCRIPTION,CREATED,MODIFIED,'
-      'SALETYPE,ORG,VAT'
+      'select ID,STAGE,PROJECTNAME,NAME,DESCRIPTION,'
+      'SALETYPE,ORG,VAT, DISCOUNT'
       'from REQUEST where PROJECTNAME = :NAME')
     ModifySQL.Strings = (
       'update REQUEST'
       'set'
       '  ID = :ID,'
+      '  STAGE = :STAGE,'
       '  PROJECTNAME = :PROJECTNAME,'
       '  NAME = :NAME,'
       '  DESCRIPTION = :DESCRIPTION,'
-      '  CREATED = :CREATED,'
-      '  MODIFIED = :MODIFIED,'
       '  SALETYPE = :SALETYPE,'
       '  ORG = :ORG,'
       '  VAT = :VAT,'
-      '  STAGE = :STAGE'
+      '  DISCOUNT = :DISCOUNT'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
@@ -1492,8 +1515,8 @@ object dmOutlay: TdmOutlay
     GeneratorField.Generator = 'GEN_REQUEST_ID'
     Active = True
     DataSource = dslProject
-    Left = 604
-    Top = 295
+    Left = 524
+    Top = 183
     object LargeintField2: TLargeintField
       FieldName = 'ID'
       Origin = '"REQUEST"."ID"'
@@ -1515,14 +1538,6 @@ object dmOutlay: TdmOutlay
       Origin = '"REQUEST"."DESCRIPTION"'
       Size = 4096
     end
-    object DateTimeField3: TDateTimeField
-      FieldName = 'CREATED'
-      Origin = '"REQUEST"."CREATED"'
-    end
-    object DateTimeField4: TDateTimeField
-      FieldName = 'MODIFIED'
-      Origin = '"REQUEST"."MODIFIED"'
-    end
     object IBStringField8: TIBStringField
       FieldName = 'SALETYPE'
       Origin = '"REQUEST"."SALETYPE"'
@@ -1542,16 +1557,20 @@ object dmOutlay: TdmOutlay
       Origin = '"REQUEST"."STAGE"'
       Size = 16
     end
+    object IBLRequestDISCOUNT: TFloatField
+      FieldName = 'DISCOUNT'
+      Origin = '"REQUEST"."DISCOUNT"'
+    end
   end
   object dslProject: TDataSource
     DataSet = IBLProject
-    Left = 512
-    Top = 360
+    Left = 432
+    Top = 248
   end
   object dslRequest: TDataSource
     DataSet = IBLRequest
-    Left = 608
-    Top = 360
+    Left = 528
+    Top = 248
   end
   object IBLSpecification: TIBDataSet
     Database = IBDatabase
@@ -1559,7 +1578,7 @@ object dmOutlay: TdmOutlay
     AfterInsert = IBLSpecificationAfterInsert
     OnCalcFields = IBLSpecificationCalcFields
     BufferChunks = 1000
-    CachedUpdates = True
+    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from SPECIFICATION'
       'where'
@@ -1588,7 +1607,9 @@ object dmOutlay: TdmOutlay
       '  VAT,'
       '  COST,'
       '  TAG,'
-      '  NOTES'
+      '  NOTES,'
+      '  CREATED,'
+      '  MODIFIED'
       'from SPECIFICATION '
       'where'
       '  ID = :ID')
@@ -1619,8 +1640,8 @@ object dmOutlay: TdmOutlay
     GeneratorField.Generator = 'GEN_SPECIFICATION_ID'
     Active = True
     DataSource = dslRequest
-    Left = 680
-    Top = 296
+    Left = 600
+    Top = 184
     object LargeintField4: TLargeintField
       FieldName = 'ID'
       Origin = '"SPECIFICATION"."ID"'
@@ -1859,11 +1880,40 @@ object dmOutlay: TdmOutlay
       KeyFields = 'PARTNAME'
       Lookup = True
     end
+    object IBLSpecificationPARTVOL: TFloatField
+      FieldKind = fkLookup
+      FieldName = 'PARTVOL'
+      LookupDataSet = IBSpecPart
+      LookupKeyFields = 'NAME'
+      LookupResultField = 'VOL'
+      KeyFields = 'PARTNAME'
+      Lookup = True
+    end
+    object IBLSpecificationPARTVOLSUM: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'PARTVOLSUM'
+      Calculated = True
+    end
+    object IBLSpecificationPARTWEIGHTSUM: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'PARTWEIGHTSUM'
+      Calculated = True
+    end
+    object IBLSpecificationPRICENDISCOUNT: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'PRICENDISCOUNT'
+      Calculated = True
+    end
+    object IBLSpecificationCOSTNDISCOUNT: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'COSTNDISCOUNT'
+      Calculated = True
+    end
   end
   object dslSpecification: TDataSource
     DataSet = IBLSpecification
-    Left = 684
-    Top = 360
+    Left = 604
+    Top = 248
   end
   object IBSpecPrice: TIBDataSet
     Database = IBDatabase
@@ -1916,8 +1966,8 @@ object dmOutlay: TdmOutlay
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_PRICE_ID'
     Active = True
-    Left = 680
-    Top = 416
+    Left = 600
+    Top = 304
     object LargeintField9: TLargeintField
       FieldName = 'ID'
       Origin = '"PRICE"."ID"'
@@ -1974,12 +2024,12 @@ object dmOutlay: TdmOutlay
       
         '  (CATEGORY, DESCRIPTION, HEIGHT, ID, LENGTH, MEASUREUNIT, NAME,' +
         ' PARTNO, '
-      '   VENDOR, WEIGHT, WIDTH)'
+      '   VENDOR, WEIGHT, WIDTH, VOL)'
       'values'
       
         '  (:CATEGORY, :DESCRIPTION, :HEIGHT, :ID, :LENGTH, :MEASUREUNIT,' +
         ' :NAME, '
-      '   :PARTNO, :VENDOR, :WEIGHT, :WIDTH)')
+      '   :PARTNO, :VENDOR, :WEIGHT, :WIDTH, :VOL)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1994,14 +2044,15 @@ object dmOutlay: TdmOutlay
       '  WEIGHT,'
       '  WIDTH,'
       '  HEIGHT,'
-      '  LENGTH'
+      '  LENGTH,'
+      '  VOL'
       'from PART '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
       
         'select CATEGORY, DESCRIPTION, HEIGHT, ID, LENGTH, MEASUREUNIT, N' +
-        'AME, PARTNO, VENDOR, WEIGHT, WIDTH from PART')
+        'AME, PARTNO, VENDOR, WEIGHT, WIDTH, VOL from PART')
     ModifySQL.Strings = (
       'update PART'
       'set'
@@ -2015,7 +2066,8 @@ object dmOutlay: TdmOutlay
       '  PARTNO = :PARTNO,'
       '  VENDOR = :VENDOR,'
       '  WEIGHT = :WEIGHT,'
-      '  WIDTH = :WIDTH'
+      '  WIDTH = :WIDTH,'
+      '  VOL = :VOL'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
@@ -2023,8 +2075,8 @@ object dmOutlay: TdmOutlay
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_PRICE_ID'
     Active = True
-    Left = 736
-    Top = 416
+    Left = 680
+    Top = 304
     object IBSpecPartID: TLargeintField
       FieldName = 'ID'
       Origin = '"PART"."ID"'
@@ -2078,6 +2130,10 @@ object dmOutlay: TdmOutlay
       FieldName = 'MEASUREUNIT'
       Origin = '"PART"."MEASUREUNIT"'
       Size = 16
+    end
+    object IBSpecPartVOL: TFloatField
+      FieldName = 'VOL'
+      Origin = '"PART"."VOL"'
     end
   end
 end

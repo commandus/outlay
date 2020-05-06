@@ -2,8 +2,8 @@ object FormMain: TFormMain
   Left = 0
   Top = 0
   Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080' 1.0'
-  ClientHeight = 541
-  ClientWidth = 1187
+  ClientHeight = 562
+  ClientWidth = 1001
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,22 +18,20 @@ object FormMain: TFormMain
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1187
-    Height = 541
+    Width = 1001
+    Height = 562
     ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     TabOrder = 0
     TabPosition = tpBottom
-    ExplicitWidth = 784
     object TabSheet3: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089
       ImageIndex = 3
-      ExplicitWidth = 776
       object Splitter1: TSplitter
         Left = 153
         Top = 0
-        Height = 515
+        Height = 536
         ExplicitLeft = 248
         ExplicitTop = 120
         ExplicitHeight = 100
@@ -42,7 +40,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 153
-        Height = 515
+        Height = 536
         Align = alLeft
         ColumnDefValues.Title.TitleButton = True
         DataSource = dmOutlay.dslProject
@@ -61,121 +59,205 @@ object FormMain: TFormMain
         object RowDetailData: TRowDetailPanelControlEh
         end
       end
-      object Panel1: TPanel
+      object PanelRight: TPanel
         Left = 156
         Top = 0
-        Width = 1023
-        Height = 515
+        Width = 837
+        Height = 536
         Align = alClient
+        BevelOuter = bvNone
         Ctl3D = False
         ParentCtl3D = False
         TabOrder = 1
-        ExplicitWidth = 620
         object Splitter2: TSplitter
-          Left = 1
-          Top = 121
-          Width = 1021
+          Left = 0
+          Top = 200
+          Width = 837
           Height = 3
           Cursor = crVSplit
           Align = alTop
+          ExplicitLeft = 1
+          ExplicitTop = 121
           ExplicitWidth = 293
         end
-        object DBGridEh3: TDBGridEh
-          Left = 1
-          Top = 1
-          Width = 1021
-          Height = 120
+        object PanelRequest: TPanel
+          Left = 0
+          Top = 0
+          Width = 837
+          Height = 200
           Align = alTop
-          ColumnDefValues.Title.TitleButton = True
-          DataSource = dmOutlay.dslRequest
-          DynProps = <>
-          OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+          BevelOuter = bvNone
           TabOrder = 0
-          Columns = <
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'NAME'
-              Footers = <>
-              Title.Caption = #1047#1072#1087#1088#1086#1089
-              Width = 267
+          object Splitter3: TSplitter
+            Left = 500
+            Top = 0
+            Height = 200
+            ExplicitLeft = 829
+          end
+          object DBGridEhRequest: TDBGridEh
+            Left = 0
+            Top = 0
+            Width = 500
+            Height = 200
+            Align = alLeft
+            ColumnDefValues.Title.TitleButton = True
+            DataSource = dmOutlay.dslRequest
+            DynProps = <>
+            OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+            TabOrder = 0
+            Columns = <
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'NAME'
+                Footers = <>
+                Title.Caption = #1047#1072#1087#1088#1086#1089
+                Width = 122
+              end
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'ORG'
+                Footers = <>
+                LookupParams.KeyFieldNames = 'ORG'
+                LookupParams.LookupDataSet = dmOutlay.IBOrg
+                LookupParams.LookupDisplayFieldName = 'ORGNAME'
+                LookupParams.LookupKeyFieldNames = 'ORGNAME'
+                Title.Caption = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1103
+                Width = 99
+              end
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'SALETYPE'
+                Footers = <>
+                LookupParams.KeyFieldNames = 'SALETYPE'
+                LookupParams.LookupDataSet = dmOutlay.IBSaleType
+                LookupParams.LookupDisplayFieldName = 'NAME'
+                LookupParams.LookupKeyFieldNames = 'NAME'
+                Title.Caption = #1058#1080#1087' '#1087#1088#1086#1076#1072#1078#1080
+                Width = 73
+              end
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'STAGE'
+                Footers = <>
+                LookupParams.KeyFieldNames = 'STAGE'
+                LookupParams.LookupDataSet = dmOutlay.IBStage
+                LookupParams.LookupDisplayFieldName = 'NAME'
+                LookupParams.LookupKeyFieldNames = 'NAME'
+                Title.Caption = #1057#1086#1089#1090#1086#1103#1085#1080#1077
+                Width = 61
+              end
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'VAT'
+                Footers = <>
+                LookupParams.KeyFieldNames = 'VAT'
+                LookupParams.LookupDataSet = dmOutlay.IBVAT
+                LookupParams.LookupDisplayFieldName = 'VAL'
+                LookupParams.LookupKeyFieldNames = 'VAL'
+                Title.Caption = #1053#1044#1057
+                Width = 30
+              end
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'PROJECTNAME'
+                Footers = <>
+                Title.Caption = #1055#1088#1086#1077#1082#1090
+                Visible = False
+                Width = 30
+              end
+              item
+                CellButtons = <>
+                DynProps = <>
+                EditButtons = <>
+                FieldName = 'DISCOUNT'
+                Footers = <>
+                Title.Caption = #1053#1072#1094#1077#1085#1082#1072
+                Width = 39
+              end>
+            object RowDetailData: TRowDetailPanelControlEh
             end
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'ORG'
-              Footers = <>
-              LookupParams.KeyFieldNames = 'ORG'
-              LookupParams.LookupDataSet = dmOutlay.IBOrg
-              LookupParams.LookupDisplayFieldName = 'ORGNAME'
-              LookupParams.LookupKeyFieldNames = 'ORGNAME'
-              Title.Caption = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1103
-              Width = 150
+          end
+          object PanelRequestProp: TPanel
+            Left = 503
+            Top = 0
+            Width = 334
+            Height = 200
+            Align = alClient
+            BevelOuter = bvNone
+            TabOrder = 1
+            object PanelCurrencyControl: TPanel
+              Left = 0
+              Top = 0
+              Width = 88
+              Height = 200
+              Align = alLeft
+              BevelOuter = bvNone
+              TabOrder = 0
+              object DBGridEhRequestCurrency: TDBGridEh
+                Left = 0
+                Top = 0
+                Width = 88
+                Height = 97
+                Align = alTop
+                ColumnDefValues.Title.TitleButton = True
+                DataSource = dmOutlay.dsRequestCurrencyRate
+                DynProps = <>
+                OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+                TabOrder = 0
+                VertScrollBar.VisibleMode = sbNeverShowEh
+                Columns = <
+                  item
+                    CellButtons = <>
+                    DynProps = <>
+                    EditButtons = <>
+                    FieldName = 'CURRENCY'
+                    Footers = <>
+                    LookupParams.KeyFieldNames = 'CURRENCY'
+                    LookupParams.LookupDataSet = dmOutlay.IBCurrency
+                    LookupParams.LookupDisplayFieldName = 'CURRENCYSYMBOL'
+                    LookupParams.LookupKeyFieldNames = 'CURRENCYSYMBOL'
+                    Title.Caption = #1042#1072#1083'.'
+                    Width = 29
+                  end
+                  item
+                    CellButtons = <>
+                    DynProps = <>
+                    EditButtons = <>
+                    FieldName = 'VAL'
+                    Footers = <>
+                    Title.Caption = #1050#1091#1088#1089
+                    Width = 36
+                  end>
+                object RowDetailData: TRowDetailPanelControlEh
+                end
+              end
             end
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'SALETYPE'
-              Footers = <>
-              LookupParams.KeyFieldNames = 'SALETYPE'
-              LookupParams.LookupDataSet = dmOutlay.IBSaleType
-              LookupParams.LookupDisplayFieldName = 'NAME'
-              LookupParams.LookupKeyFieldNames = 'NAME'
-              Title.Caption = #1058#1080#1087' '#1087#1088#1086#1076#1072#1078#1080
-              Width = 73
-            end
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'STAGE'
-              Footers = <>
-              LookupParams.KeyFieldNames = 'STAGE'
-              LookupParams.LookupDataSet = dmOutlay.IBStage
-              LookupParams.LookupDisplayFieldName = 'NAME'
-              LookupParams.LookupKeyFieldNames = 'NAME'
-              Title.Caption = #1057#1086#1089#1090#1086#1103#1085#1080#1077
-              Width = 61
-            end
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'VAT'
-              Footers = <>
-              LookupParams.KeyFieldNames = 'VAT'
-              LookupParams.LookupDataSet = dmOutlay.IBVAT
-              LookupParams.LookupDisplayFieldName = 'VAL'
-              LookupParams.LookupKeyFieldNames = 'VAL'
-              Title.Caption = #1053#1044#1057
-              Width = 30
-            end
-            item
-              CellButtons = <>
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'PROJECTNAME'
-              Footers = <>
-              Title.Caption = #1055#1088#1086#1077#1082#1090
-              Visible = False
-              Width = 30
-            end>
-          object RowDetailData: TRowDetailPanelControlEh
           end
         end
-        object DBGridEh4: TDBGridEh
-          Left = 1
-          Top = 124
-          Width = 1021
-          Height = 390
+        object DBGridEhSpec: TDBGridEh
+          Left = 0
+          Top = 203
+          Width = 837
+          Height = 333
           Align = alClient
           ColumnDefValues.Title.TitleButton = True
           DataSource = dmOutlay.dslSpecification
           DynProps = <>
+          FooterRowCount = 1
           OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+          SumList.Active = True
           TabOrder = 1
           Columns = <
             item
@@ -196,6 +278,8 @@ object FormMain: TFormMain
               DynProps = <>
               EditButtons = <>
               FieldName = 'PARTNO'
+              Footer.FieldName = 'ID'
+              Footer.ValueType = fvtCount
               Footers = <>
               Title.Caption = #1040#1088#1090#1080#1082#1091#1083
               Width = 100
@@ -218,6 +302,7 @@ object FormMain: TFormMain
               DynProps = <>
               EditButtons = <>
               FieldName = 'QTY'
+              Footer.ValueType = fvtSum
               Footers = <>
               Title.Caption = #1050#1086#1083'-'#1074#1086
               Width = 39
@@ -262,6 +347,7 @@ object FormMain: TFormMain
               DynProps = <>
               EditButtons = <>
               FieldName = 'COSTLIST'
+              Footer.ValueType = fvtSum
               Footers = <>
               Title.Caption = #1057#1091#1084#1084#1072', '#1088#1091#1073'.'
               Width = 63
@@ -278,6 +364,8 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'PRICENDISCOUNT'
+              Footer.ValueType = fvtSum
               Footers = <>
               Title.Caption = #1062#1077#1085#1072'+%'
             end
@@ -285,6 +373,8 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'COSTNDISCOUNT'
+              Footer.ValueType = fvtSum
               Footers = <>
               Title.Caption = #1057#1091#1084#1084#1072'+%'
             end
@@ -324,7 +414,7 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
-              FieldName = 'PARTVOLUME'
+              FieldName = 'PARTVOL'
               Footers = <>
               Title.Caption = #1054#1073#1098#1077#1084' '#1077#1076'.'
               Width = 60
@@ -333,6 +423,7 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'PARTWEIGHT'
               Footers = <>
               Title.Caption = #1042#1077#1089' '#1077#1076'.'
             end
@@ -340,6 +431,8 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'PARTVOLSUM'
+              Footer.ValueType = fvtSum
               Footers = <>
               Title.Caption = #1054#1073#1098#1077#1084
             end
@@ -347,6 +440,8 @@ object FormMain: TFormMain
               CellButtons = <>
               DynProps = <>
               EditButtons = <>
+              FieldName = 'PARTWEIGHTSUM'
+              Footer.ValueType = fvtSum
               Footers = <>
               Title.Caption = #1042#1077#1089
             end
@@ -375,15 +470,14 @@ object FormMain: TFormMain
     object TabSheet4: TTabSheet
       Caption = #1055#1088#1086#1077#1082#1090#1099
       ImageIndex = 4
-      ExplicitWidth = 776
       DesignSize = (
-        1179
-        515)
+        993
+        536)
       object DBGridEh2: TDBGridEh
         Left = 0
         Top = 0
-        Width = 1179
-        Height = 484
+        Width = 993
+        Height = 505
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
         Ctl3D = True
@@ -454,17 +548,17 @@ object FormMain: TFormMain
             CellButtons = <>
             DynProps = <>
             EditButtons = <>
-            FieldName = 'MODIFIED'
+            FieldName = 'DISCOUNT'
             Footers = <>
-            Title.Caption = #1048#1079#1084#1077#1085#1077#1085
-            Width = 60
+            Title.Caption = #1053#1072#1094#1077#1085#1082#1072
+            Width = 37
           end>
         object RowDetailData: TRowDetailPanelControlEh
         end
       end
       object DBNavigatorProjects: TDBNavigator
         Left = 0
-        Top = 484
+        Top = 505
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsProject
@@ -474,15 +568,14 @@ object FormMain: TFormMain
     end
     object TabSheet1: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089#1099
-      ExplicitWidth = 776
       DesignSize = (
-        1179
-        515)
+        993
+        536)
       object DBGridProjectList: TDBGridEh
         Left = 0
         Top = 0
-        Width = 1179
-        Height = 484
+        Width = 993
+        Height = 505
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
         DataSource = dmOutlay.dsRequest
@@ -573,7 +666,7 @@ object FormMain: TFormMain
       end
       object DBNavigatorRequest: TDBNavigator
         Left = 0
-        Top = 484
+        Top = 505
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsRequest
@@ -584,15 +677,14 @@ object FormMain: TFormMain
     object TabSheet2: TTabSheet
       Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
       ImageIndex = 2
-      ExplicitWidth = 776
       DesignSize = (
-        1179
-        515)
+        993
+        536)
       object DBGridEh8: TDBGridEh
         Left = 0
         Top = 0
-        Width = 1179
-        Height = 484
+        Width = 993
+        Height = 505
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
         DataSource = dmOutlay.dsSpecification
@@ -683,69 +775,12 @@ object FormMain: TFormMain
       end
       object DBNavigator8: TDBNavigator
         Left = 0
-        Top = 484
+        Top = 505
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsSpecification
         Anchors = [akLeft, akBottom]
         TabOrder = 1
-      end
-    end
-    object TabSheet5: TTabSheet
-      Caption = #1050#1091#1088#1089
-      ImageIndex = 4
-      ExplicitWidth = 776
-      DesignSize = (
-        1179
-        515)
-      object DBNavigator6: TDBNavigator
-        Left = 0
-        Top = 484
-        Width = 320
-        Height = 30
-        DataSource = dmOutlay.dsValidCurrency
-        Anchors = [akLeft, akBottom]
-        TabOrder = 0
-      end
-      object DBGridEh6: TDBGridEh
-        Left = 0
-        Top = 0
-        Width = 723
-        Height = 478
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        ColumnDefValues.Title.TitleButton = True
-        DataSource = dmOutlay.dsValidCurrency
-        DynProps = <>
-        OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
-        TabOrder = 1
-        Columns = <
-          item
-            CellButtons = <>
-            DynProps = <>
-            EditButtons = <>
-            FieldName = 'CURRENCYSYMBOL'
-            Footers = <>
-            Title.Caption = #1054#1073#1086#1079#1085#1072#1095#1077#1085#1080#1077
-          end
-          item
-            CellButtons = <>
-            DynProps = <>
-            EditButtons = <>
-            FieldName = 'NAME'
-            Footers = <>
-            Title.Caption = #1042#1072#1083#1102#1090#1072
-          end
-          item
-            CellButtons = <>
-            DynProps = <>
-            EditButtons = <>
-            FieldName = 'DEFAULTRATE'
-            Footers = <>
-            Title.Caption = #1050#1091#1088#1089' '#1082' RUR'
-            Width = 80
-          end>
-        object RowDetailData: TRowDetailPanelControlEh
-        end
       end
     end
   end
@@ -809,98 +844,5 @@ object FormMain: TFormMain
         OnClick = MenuHelpAboutClick
       end
     end
-  end
-  object ibPrice: TIBDataSet
-    Database = dmOutlay.IBDatabase
-    Transaction = dmOutlay.IBTransaction
-    BufferChunks = 1000
-    CachedUpdates = False
-    DeleteSQL.Strings = (
-      'delete from PRICE'
-      'where'
-      '  ID = :OLD_ID')
-    InsertSQL.Strings = (
-      'insert into PRICE'
-      '  (ID, PARTNAME, ORGNAME, CURRENCY, PRICE, SRC, NOTES)'
-      'values'
-      '  (:ID, :PARTNAME, :ORGNAME, :CURRENCY, :PRICE, :SRC, :NOTES)')
-    RefreshSQL.Strings = (
-      'Select '
-      '  ID,'
-      '  PARTNAME,'
-      '  ORGNAME,'
-      '  CURRENCY,'
-      '  PRICE,'
-      '  CREATED,'
-      '  MODIFIED,'
-      '  SRC,'
-      '  NOTES'
-      'from PRICE '
-      'where'
-      '  ID = :ID')
-    SelectSQL.Strings = (
-      
-        'select ID,PARTNAME,ORGNAME,CURRENCY,PRICE,CREATED,MODIFIED,SRC,N' +
-        'OTES'
-      'from PRICE WHERE PARTNAME = :PARTNAME')
-    ModifySQL.Strings = (
-      'update PRICE'
-      'set'
-      '  ID = :ID,'
-      '  PARTNAME = :PARTNAME,'
-      '  ORGNAME = :ORGNAME,'
-      '  CURRENCY = :CURRENCY,'
-      '  PRICE = :PRICE,'
-      '  SRC = :SRC,'
-      '  NOTES = :NOTES'
-      'where'
-      '  ID = :OLD_ID')
-    ParamCheck = True
-    UniDirectional = False
-    GeneratorField.Field = 'ID'
-    GeneratorField.Generator = 'GEN_PRICE_ID'
-    DataSource = dmOutlay.dslSpecification
-    Left = 380
-    Top = 344
-    object ibPriceID: TLargeintField
-      FieldName = 'ID'
-      Origin = '"PRICE"."ID"'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-    end
-    object ibPricePARTNAME: TIBStringField
-      FieldName = 'PARTNAME'
-      Origin = '"PRICE"."PARTNAME"'
-      Size = 1024
-    end
-    object ibPriceORGNAME: TIBStringField
-      FieldName = 'ORGNAME'
-      Origin = '"PRICE"."ORGNAME"'
-      Size = 1024
-    end
-    object ibPriceCURRENCY: TIBStringField
-      FieldName = 'CURRENCY'
-      Origin = '"PRICE"."CURRENCY"'
-      Size = 1024
-    end
-    object ibPricePRICE: TFloatField
-      FieldName = 'PRICE'
-      Origin = '"PRICE"."PRICE"'
-    end
-    object ibPriceSRC: TIBStringField
-      FieldName = 'SRC'
-      Origin = '"PRICE"."SRC"'
-      Size = 255
-    end
-    object ibPriceNOTES: TIBStringField
-      FieldName = 'NOTES'
-      Origin = '"PRICE"."NOTES"'
-      Size = 4096
-    end
-  end
-  object dsPrice: TDataSource
-    DataSet = ibPrice
-    Left = 380
-    Top = 392
   end
 end
