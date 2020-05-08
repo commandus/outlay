@@ -58,6 +58,7 @@ object dmOutlay: TdmOutlay
   end
   object IBTransaction: TIBTransaction
     Active = True
+    DefaultDatabase = IBDatabase
     AutoStopAction = saCommit
     Left = 76
     Top = 16
@@ -1010,6 +1011,8 @@ object dmOutlay: TdmOutlay
     Database = IBDatabase
     Transaction = IBTransaction
     AfterInsert = IBLRequestCurrencyRateAfterInsert
+    AfterOpen = IBLRequestCurrencyRateAfterOpen
+    AfterPost = IBLRequestCurrencyRateAfterPost
     BufferChunks = 1000
     CachedUpdates = False
     DeleteSQL.Strings = (
@@ -1582,6 +1585,7 @@ object dmOutlay: TdmOutlay
   object IBLSpecification: TIBDataSet
     Database = IBDatabase
     Transaction = IBTransaction
+    AfterDelete = IBLSpecificationAfterDelete
     AfterInsert = IBLSpecificationAfterInsert
     AfterOpen = IBLSpecificationAfterOpen
     AfterPost = IBLSpecificationAfterPost
@@ -1927,7 +1931,6 @@ object dmOutlay: TdmOutlay
   end
   object dslSpecification: TDataSource
     DataSet = IBLSpecification
-    OnDataChange = dslSpecificationDataChange
     Left = 604
     Top = 248
   end
@@ -2150,6 +2153,218 @@ object dmOutlay: TdmOutlay
     object IBSpecPartVOL: TFloatField
       FieldName = 'VOL'
       Origin = '"PART"."VOL"'
+    end
+  end
+  object dsPaymentType: TDataSource
+    DataSet = IBPaymentType
+    Left = 52
+    Top = 400
+  end
+  object IBPaymentType: TIBDataSet
+    Database = IBDatabase
+    Transaction = IBTransaction
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from PAYMENTTYPE'
+      'where'
+      '  NAME = :OLD_NAME')
+    InsertSQL.Strings = (
+      'insert into PAYMENTTYPE'
+      '  (CODE, NAME)'
+      'values'
+      '  (:CODE, :NAME)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  CODE,'
+      '  NAME'
+      'from PAYMENTTYPE '
+      'where'
+      '  NAME = :NAME')
+    SelectSQL.Strings = (
+      'select NAME, CODE from PAYMENTTYPE')
+    ModifySQL.Strings = (
+      'update PAYMENTTYPE'
+      'set'
+      '  CODE = :CODE,'
+      '  NAME = :NAME'
+      'where'
+      '  NAME = :OLD_NAME')
+    ParamCheck = True
+    UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PERSON_ID'
+    Active = True
+    Left = 52
+    Top = 352
+    object IBPaymentTypeNAME: TIBStringField
+      FieldName = 'NAME'
+      Origin = '"PAYMENTTYPE"."NAME"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 1024
+    end
+    object IBPaymentTypeCODE: TLargeintField
+      FieldName = 'CODE'
+      Origin = '"PAYMENTTYPE"."CODE"'
+      Required = True
+    end
+  end
+  object dsPaymentState: TDataSource
+    DataSet = IBPaymentState
+    Left = 116
+    Top = 400
+  end
+  object IBPaymentState: TIBDataSet
+    Database = IBDatabase
+    Transaction = IBTransaction
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from PAYMENTSTATE'
+      'where'
+      '  NAME = :OLD_NAME')
+    InsertSQL.Strings = (
+      'insert into PAYMENTSTATE'
+      '  (NAME, CODE)'
+      'values'
+      '  (:NAME, :CODE)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  NAME,'
+      '  CODE'
+      'from PAYMENTSTATE '
+      'where'
+      '  NAME = :NAME')
+    SelectSQL.Strings = (
+      'select NAME, CODE from PAYMENTSTATE')
+    ModifySQL.Strings = (
+      'update PAYMENTSTATE'
+      'set'
+      '  NAME = :NAME,'
+      '  CODE = :CODE'
+      'where'
+      '  NAME = :OLD_NAME')
+    ParamCheck = True
+    UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PERSON_ID'
+    Active = True
+    Left = 116
+    Top = 352
+    object IBStringField19: TIBStringField
+      FieldName = 'NAME'
+      Origin = '"PAYMENTTYPE"."NAME"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 16
+    end
+    object LargeintField10: TLargeintField
+      FieldName = 'CODE'
+      Origin = '"PAYMENTTYPE"."CODE"'
+      Required = True
+    end
+  end
+  object dsPayment: TDataSource
+    DataSet = IBLPayment
+    Left = 724
+    Top = 240
+  end
+  object IBLPayment: TIBDataSet
+    Database = IBDatabase
+    Transaction = IBTransaction
+    AfterInsert = IBLPaymentAfterInsert
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from PAYMENT'
+      'where'
+      '  ID = :OLD_ID')
+    InsertSQL.Strings = (
+      'insert into PAYMENT'
+      '  (REQUESTID, PSTATE, PAYDAY, VAL, DOCID, NOTES, PTYPE, ID)'
+      'values'
+      
+        '  (:REQUESTID, :PSTATE, :PAYDAY, :VAL, :DOCID, :NOTES, :PTYPE, :' +
+        'ID)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  REQUESTID,'
+      '  PSTATE,'
+      '  PAYDAY,'
+      '  VAL,'
+      '  DOCID,'
+      '  NOTES,'
+      '  PTYPE,'
+      '  ID'
+      'from PAYMENT '
+      'where'
+      '  ID = :ID')
+    SelectSQL.Strings = (
+      
+        'select DOCID, NOTES, PAYDAY, PSTATE, PTYPE, REQUESTID, VAL, ID f' +
+        'rom PAYMENT'
+      'where REQUESTID = :ID')
+    ModifySQL.Strings = (
+      'update PAYMENT'
+      'set'
+      '  REQUESTID = :REQUESTID,'
+      '  PSTATE = :PSTATE,'
+      '  PAYDAY = :PAYDAY,'
+      '  VAL = :VAL,'
+      '  DOCID = :DOCID,'
+      '  NOTES = :NOTES,'
+      '  PTYPE = :PTYPE,'
+      '  ID = :ID'
+      'where'
+      '  ID = :OLD_ID')
+    ParamCheck = True
+    UniDirectional = False
+    GeneratorField.Field = 'ID'
+    GeneratorField.Generator = 'GEN_PAYMENT_ID'
+    Active = True
+    DataSource = dslRequest
+    Left = 724
+    Top = 192
+    object IBLPaymentDOCID: TIBStringField
+      FieldName = 'DOCID'
+      Origin = '"PAYMENT"."DOCID"'
+      Size = 1024
+    end
+    object IBLPaymentNOTES: TIBStringField
+      FieldName = 'NOTES'
+      Origin = '"PAYMENT"."NOTES"'
+      Size = 4096
+    end
+    object IBLPaymentPAYDAY: TDateTimeField
+      FieldName = 'PAYDAY'
+      Origin = '"PAYMENT"."PAYDAY"'
+    end
+    object IBLPaymentPSTATE: TIBStringField
+      FieldName = 'PSTATE'
+      Origin = '"PAYMENT"."PSTATE"'
+      Required = True
+      Size = 16
+    end
+    object IBLPaymentPTYPE: TIBStringField
+      FieldName = 'PTYPE'
+      Origin = '"PAYMENT"."PTYPE"'
+      Size = 1024
+    end
+    object IBLPaymentREQUESTID: TLargeintField
+      FieldName = 'REQUESTID'
+      Origin = '"PAYMENT"."REQUESTID"'
+      Required = True
+    end
+    object IBLPaymentVAL: TFloatField
+      FieldName = 'VAL'
+      Origin = '"PAYMENT"."VAL"'
+    end
+    object IBLPaymentID: TLargeintField
+      FieldName = 'ID'
+      Origin = '"PAYMENT"."ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
     end
   end
 end

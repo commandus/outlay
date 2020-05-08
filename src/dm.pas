@@ -207,15 +207,36 @@ type
     IBLSpecificationCOSTNDISCOUNT: TCurrencyField;
     IBLSpecificationREBATE: TFloatField;
     IBSpecificationREBATE: TFloatField;
+    dsPaymentType: TDataSource;
+    IBPaymentType: TIBDataSet;
+    IBPaymentTypeNAME: TIBStringField;
+    IBPaymentTypeCODE: TLargeintField;
+    dsPaymentState: TDataSource;
+    IBPaymentState: TIBDataSet;
+    IBStringField19: TIBStringField;
+    LargeintField10: TLargeintField;
+    dsPayment: TDataSource;
+    IBLPayment: TIBDataSet;
+    IBLPaymentDOCID: TIBStringField;
+    IBLPaymentNOTES: TIBStringField;
+    IBLPaymentPAYDAY: TDateTimeField;
+    IBLPaymentPSTATE: TIBStringField;
+    IBLPaymentPTYPE: TIBStringField;
+    IBLPaymentREQUESTID: TLargeintField;
+    IBLPaymentVAL: TFloatField;
+    IBLPaymentID: TLargeintField;
     procedure DataModuleCreate(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
     procedure IBLProjectAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationCalcFields(DataSet: TDataSet);
     procedure IBLRequestCurrencyRateAfterInsert(DataSet: TDataSet);
-    procedure dslSpecificationDataChange(Sender: TObject; Field: TField);
     procedure IBLSpecificationAfterPost(DataSet: TDataSet);
     procedure IBLSpecificationAfterOpen(DataSet: TDataSet);
+    procedure IBLPaymentAfterInsert(DataSet: TDataSet);
+    procedure IBLRequestCurrencyRateAfterOpen(DataSet: TDataSet);
+    procedure IBLRequestCurrencyRateAfterPost(DataSet: TDataSet);
+    procedure IBLSpecificationAfterDelete(DataSet: TDataSet);
   private
     function getStyles: TStringList;
     function GetSelectedProjectName: String;
@@ -250,6 +271,7 @@ type
     function getCurrencyRate(const curr: string): Double;
     procedure setRequestDiscount2All(const val: double);
     procedure updateSums();
+    procedure updatedCurrencyRate();
     class procedure ActivateDbControls(component: TComponent);
   end;
 
@@ -270,10 +292,6 @@ begin
   inifilename:= ChangeFileExt(Application.ExeName, '.ini');
   loadSettings();
   connect(IBDatabase);
-end;
-
-procedure TdmOutlay.dslSpecificationDataChange(Sender: TObject; Field: TField);
-begin
 end;
 
 {
@@ -338,6 +356,14 @@ begin
   Result:= styles;
 end;
 
+procedure TdmOutlay.IBLPaymentAfterInsert(DataSet: TDataSet);
+begin
+  if (DataSet.State in [dsEdit, dsInsert]) then
+  begin
+    DataSet.FieldByName('REQUESTID').AsLongWord:= GetSelectedRequestId();
+  end;
+end;
+
 procedure TdmOutlay.IBLProjectAfterInsert(DataSet: TDataSet);
 begin
   if (DataSet.State in [dsEdit, dsInsert]) then
@@ -357,6 +383,11 @@ begin
     DataSet.FieldByName('DISCOUNT').AsLargeInt:= GetSelectedProjectDiscount();
     IBLRequestCurrencyRate.Refresh;
   end;
+end;
+
+procedure TdmOutlay.IBLSpecificationAfterDelete(DataSet: TDataSet);
+begin
+  updateSums();
 end;
 
 procedure TdmOutlay.IBLSpecificationAfterInsert(DataSet: TDataSet);
@@ -388,6 +419,15 @@ begin
     requestSumList.Assign(sl);
   end;
   sl.Free;
+end;
+
+procedure TdmOutlay.updatedCurrencyRate();
+begin
+  if IBLSpecification.Active then
+  begin
+    IBLSpecification.Close;
+    IBLSpecification.Open;
+  end;
 end;
 
 function TdmOutlay.getCurrencyRate(const curr: string): Double;
@@ -466,6 +506,16 @@ end;
 procedure TdmOutlay.IBLRequestCurrencyRateAfterInsert(DataSet: TDataSet);
 begin
   Dataset.FieldByName('REQUESTID').AsLongWord:= IBLRequest.FieldByName('ID').AsLongWord;
+end;
+
+procedure TdmOutlay.IBLRequestCurrencyRateAfterOpen(DataSet: TDataSet);
+begin
+  updatedCurrencyRate();
+end;
+
+procedure TdmOutlay.IBLRequestCurrencyRateAfterPost(DataSet: TDataSet);
+begin
+  updatedCurrencyRate();
 end;
 
 class procedure TdmOutlay.loadLastStyle();
@@ -628,7 +678,8 @@ var
   c, k: String;
   rebate, price, priceRUR,
   rebateRUR, discountRUR, rebateCurr, discountCurr: Currency;
-  rate, qty, vol, vat, weight, discount: double;
+  rate, qty, vol, vat, weight, discount,
+  sumWeight, sumVol: double;
   sumIn, sumRebate, sumDiscount: Currency;
   sumVATIn, sumVATRebate, sumVATDiscount: Currency;
   currCostIn, currCostRebate, currCostDiscount: TDictionary<String, Currency>;
@@ -643,6 +694,8 @@ begin
   sumVATIn:= 0.0;
   sumVATRebate:= 0.0;
   sumVATDiscount:= 0.0;
+  sumWeight:= 0;
+  sumVol:= 0;
 
   currCostIn:= TDictionary<String, Currency>.Create();
   currCostRebate:= TDictionary<String, Currency>.Create();
@@ -670,22 +723,26 @@ begin
     if not currCostDiscount.ContainsKey(c) then
       currCostDiscount.Add(c, 0.0);
 
-    currCostIn[c]:= currCostIn[c] + price;
+    currCostIn[c]:= currCostIn[c] + qty * price;
     priceRUR:= rate * price;
     sumIn:= sumIn + qty * priceRUR;
     sumVATIn:= sumVATIn + (qty * priceRUR * vat / 100);
     rebateRUR:= (priceRUR * rebate / 100);
     sumRebate:= sumRebate + qty * (priceRUR - rebateRUR);
     sumVATRebate:= sumVATRebate + qty * (priceRUR - rebateRUR) * vat / 100;
-    discountRUR:= (rebateRUR * discount / 100);
-    sumDiscount:= sumDiscount + qty * (rebateRUR + discountRUR);
-    sumVATDiscount:= sumVATDiscount + qty * (rebateRUR + discountRUR) * vat / 100;
+    discountRUR:= (priceRUR - rebateRUR) * discount / 100;
+
+    sumDiscount:= sumDiscount + qty * (priceRUR - rebateRUR + discountRUR);
+
+    sumVATDiscount:= sumVATDiscount + qty * (priceRUR - rebateRUR + discountRUR) * vat / 100;
 
     rebateCurr:= (price * rebate / 100);
-    currCostRebate[c]:= currCostRebate[c] + price - rebateCurr;
+    currCostRebate[c]:= currCostRebate[c] + qty * (price - rebateCurr);
     discountCurr:= (rebateCurr * discount/ 100);
-    currCostDiscount[c]:= currCostDiscount[c] + discountCurr;
+    currCostDiscount[c]:= currCostDiscount[c] + qty * (price - discountCurr);
 
+    sumWeight:= sumWeight + weight * qty;
+    sumVol:= sumVol + Vol * qty;
     IBLSpecification.Next;
   end;
 
@@ -708,14 +765,14 @@ begin
     Result.Values['С наценкой ' + k]:= CurrToStr(currCostDiscount.Items[k]);
   end;
   Result.Values['Продажа ']:= CurrToStr(sumDiscount);
-  Result.Values['Вал. прибыль ']:= CurrToStr(sumIn);
+  Result.Values['Вал. прибыль ']:= CurrToStr(sumDiscount - sumRebate);
 
   Result.Values['Вход. налог ']:= CurrToStr(sumVATIn);
   Result.Values['С рибейтом налог ']:= CurrToStr(sumVATRebate);
   Result.Values['Выход. налог ']:= CurrToStr(sumVATDiscount);
 
-  Result.Values['Вес ']:= FloatToStrF(weight, ffFixed, 2, 0);
-  Result.Values['Объем ']:= FloatToStrF(vol, ffFixed, 2, 0);
+  Result.Values['Вес ']:= FloatToStrF(sumWeight, ffFixed, 18, 2);
+  Result.Values['Объем ']:= FloatToStrF(sumVol, ffFixed, 18, 2);
 
   currCostIn.Free;
   currCostRebate.Free;

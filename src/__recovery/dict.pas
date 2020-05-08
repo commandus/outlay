@@ -21,10 +21,10 @@ type
     TabSheet6: TTabSheet;
     DBGridProjectList: TDBGridEh;
     DBNavigatorRequest: TDBNavigator;
-    Организации: TTabSheet;
+    РћСЂРіР°РЅРёР·Р°С†РёРё: TTabSheet;
     DBGridEh1: TDBGridEh;
     DBNavigatorOrg: TDBNavigator;
-    НДС: TTabSheet;
+    РќР”РЎ: TTabSheet;
     DBGVAT: TDBGridEh;
     DBNavigatorVAT: TDBNavigator;
     DBGridEh2: TDBGridEh;

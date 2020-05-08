@@ -59,6 +59,7 @@ type
     actRollback: TAction;
     ImageList1: TImageList;
     VLERequestSums: TValueListEditor;
+    DBGridEhPayment: TDBGridEh;
     procedure ShowOptions();
     procedure ShowMyOrg();
     procedure ShowDict();
@@ -180,15 +181,20 @@ end;
 procedure TFormMain.RefreshData();
 var
   c: Integer;
+  p: boolean;
 begin
   try
     for c:= 0 to ComponentCount - 1 do begin
       if (Components[c] is TDBGridEh) then with TDBGridEh(Components[c]) do begin
-        if DataSource = dmOutlay.dslProject then
-          SaveVertPos('NAME');
-        DataSource.DataSet.Close;
+        p:= DataSource = dmOutlay.dslProject;
+        if DataSource.DataSet.Active then begin
+          if p then begin
+            SaveVertPos('NAME');
+          end;
+          DataSource.DataSet.Close;
+        end;
         DataSource.DataSet.Open();
-        if DataSource = dmOutlay.dslProject then
+        if p then
           RestoreVertPos('NAME');
         // DataSource.DataSet.Refresh();
         // Refresh();
@@ -216,6 +222,8 @@ begin
     dm.dmOutlay.IBLRequest.Cancel;
   if dm.dmOutlay.IBLSpecification.Modified then
     dm.dmOutlay.IBLSpecification.Cancel;
+  // dm.dmOutlay.IBDatabase.DefaultTransaction.Rollback;
+  // dm.dmOutlay.IBDatabase.DefaultTransaction.StartTransaction;
 end;
 
 procedure TFormMain.Commit3();
@@ -226,6 +234,8 @@ begin
     dm.dmOutlay.IBLRequest.Post;
   if dm.dmOutlay.IBLSpecification.Modified then
     dm.dmOutlay.IBLSpecification.Post;
+  // dm.dmOutlay.IBDatabase.DefaultTransaction.Commit;
+  // dm.dmOutlay.IBDatabase.DefaultTransaction.StartTransaction;
 end;
 
 procedure TFormMain.ActionSetRequestDiscountExecute(Sender: TObject);

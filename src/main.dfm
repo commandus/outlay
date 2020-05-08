@@ -2,7 +2,7 @@ object FormMain: TFormMain
   Left = 0
   Top = 0
   Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080' 1.0'
-  ClientHeight = 562
+  ClientHeight = 542
   ClientWidth = 1001
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,19 +20,21 @@ object FormMain: TFormMain
     Left = 0
     Top = 0
     Width = 1001
-    Height = 562
+    Height = 542
     ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     TabOrder = 0
     TabPosition = tpBottom
+    ExplicitHeight = 562
     object TabSheet3: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089
       ImageIndex = 3
+      ExplicitHeight = 536
       object Splitter1: TSplitter
         Left = 153
         Top = 0
-        Height = 536
+        Height = 516
         ExplicitLeft = 248
         ExplicitTop = 120
         ExplicitHeight = 100
@@ -41,7 +43,7 @@ object FormMain: TFormMain
         Left = 0
         Top = 0
         Width = 153
-        Height = 536
+        Height = 516
         Align = alLeft
         Border.EdgeBorders = []
         BorderStyle = bsNone
@@ -66,12 +68,13 @@ object FormMain: TFormMain
         Left = 156
         Top = 0
         Width = 837
-        Height = 536
+        Height = 516
         Align = alClient
         BevelOuter = bvNone
         Ctl3D = False
         ParentCtl3D = False
         TabOrder = 1
+        ExplicitHeight = 536
         object Splitter2: TSplitter
           Left = 0
           Top = 200
@@ -207,7 +210,7 @@ object FormMain: TFormMain
               Top = 0
               Width = 334
               Height = 200
-              ActivePage = TabSheet6
+              ActivePage = TabSheet5
               Align = alClient
               TabOrder = 0
               object TabSheet5: TTabSheet
@@ -224,8 +227,8 @@ object FormMain: TFormMain
                     Left = 0
                     Top = 0
                     Width = 88
-                    Height = 97
-                    Align = alTop
+                    Height = 146
+                    Align = alClient
                     Border.EdgeBorders = []
                     BorderStyle = bsNone
                     ColumnDefValues.Title.TitleButton = True
@@ -281,6 +284,69 @@ object FormMain: TFormMain
                   ParentFont = False
                   Spacing = 0
                 end
+                object DBGridEhPayment: TDBGridEh
+                  Left = 88
+                  Top = 26
+                  Width = 238
+                  Height = 146
+                  Align = alClient
+                  Border.EdgeBorders = []
+                  BorderStyle = bsNone
+                  ColumnDefValues.Title.TitleButton = True
+                  DataSource = dmOutlay.dsPayment
+                  DynProps = <>
+                  OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+                  TabOrder = 2
+                  VertScrollBar.VisibleMode = sbNeverShowEh
+                  Columns = <
+                    item
+                      CellButtons = <>
+                      DisplayFormat = 'DD-MM-YYYY'
+                      DynProps = <>
+                      EditButtons = <>
+                      FieldName = 'PAYDAY'
+                      Footers = <>
+                      Title.Caption = #1044#1072#1090#1072
+                      Width = 65
+                    end
+                    item
+                      CellButtons = <>
+                      DynProps = <>
+                      EditButtons = <>
+                      FieldName = 'PSTATE'
+                      Footers = <>
+                      LookupParams.KeyFieldNames = 'PSTATE'
+                      LookupParams.LookupDataSet = dmOutlay.IBPaymentState
+                      LookupParams.LookupDisplayFieldName = 'NAME'
+                      LookupParams.LookupKeyFieldNames = 'NAME'
+                      Title.Caption = #1057#1086#1089#1090'.'
+                      Width = 36
+                    end
+                    item
+                      CellButtons = <>
+                      DynProps = <>
+                      EditButtons = <>
+                      FieldName = 'PTYPE'
+                      Footers = <>
+                      LookupParams.KeyFieldNames = 'PTYPE'
+                      LookupParams.LookupDataSet = dmOutlay.IBPaymentType
+                      LookupParams.LookupDisplayFieldName = 'NAME'
+                      LookupParams.LookupKeyFieldNames = 'NAME'
+                      Title.Caption = #1058#1080#1087
+                      Width = 30
+                    end
+                    item
+                      CellButtons = <>
+                      DynProps = <>
+                      EditButtons = <>
+                      FieldName = 'VAL'
+                      Footers = <>
+                      Title.Caption = #1057#1091#1084#1084#1072
+                      Width = 69
+                    end>
+                  object RowDetailData: TRowDetailPanelControlEh
+                  end
+                end
               end
               object TabSheet6: TTabSheet
                 Caption = #1057#1074#1086#1076#1082#1072
@@ -289,13 +355,14 @@ object FormMain: TFormMain
                   Left = 0
                   Top = 0
                   Width = 326
-                  Height = 168
-                  Align = alTop
+                  Height = 172
+                  Align = alClient
                   BorderStyle = bsNone
                   TabOrder = 0
                   TitleCaptions.Strings = (
                     #1048#1090#1086#1075
                     #1047#1085#1072#1095#1077#1085#1080#1077)
+                  ExplicitHeight = 168
                   ColWidths = (
                     150
                     174)
@@ -308,7 +375,7 @@ object FormMain: TFormMain
           Left = 0
           Top = 203
           Width = 837
-          Height = 333
+          Height = 313
           Align = alClient
           Border.EdgeBorders = []
           BorderStyle = bsNone
@@ -538,14 +605,15 @@ object FormMain: TFormMain
     object TabSheet4: TTabSheet
       Caption = #1055#1088#1086#1077#1082#1090#1099
       ImageIndex = 4
+      ExplicitHeight = 536
       DesignSize = (
         993
-        536)
+        516)
       object DBGridEh2: TDBGridEh
         Left = 0
         Top = 0
         Width = 993
-        Height = 505
+        Height = 485
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
         Ctl3D = True
@@ -626,24 +694,26 @@ object FormMain: TFormMain
       end
       object DBNavigatorProjects: TDBNavigator
         Left = 0
-        Top = 505
+        Top = 485
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsProject
         Anchors = [akLeft, akBottom]
         TabOrder = 1
+        ExplicitTop = 505
       end
     end
     object TabSheet1: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089#1099
+      ExplicitHeight = 536
       DesignSize = (
         993
-        536)
+        516)
       object DBGridProjectList: TDBGridEh
         Left = 0
         Top = 0
         Width = 993
-        Height = 505
+        Height = 485
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
         DataSource = dmOutlay.dsRequest
@@ -734,25 +804,27 @@ object FormMain: TFormMain
       end
       object DBNavigatorRequest: TDBNavigator
         Left = 0
-        Top = 505
+        Top = 485
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsRequest
         Anchors = [akLeft, akBottom]
         TabOrder = 1
+        ExplicitTop = 505
       end
     end
     object TabSheet2: TTabSheet
       Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
       ImageIndex = 2
+      ExplicitHeight = 536
       DesignSize = (
         993
-        536)
+        516)
       object DBGridEh8: TDBGridEh
         Left = 0
         Top = 0
         Width = 993
-        Height = 505
+        Height = 485
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColumnDefValues.Title.TitleButton = True
         DataSource = dmOutlay.dsSpecification
@@ -843,12 +915,13 @@ object FormMain: TFormMain
       end
       object DBNavigator8: TDBNavigator
         Left = 0
-        Top = 505
+        Top = 485
         Width = 320
         Height = 30
         DataSource = dmOutlay.dsSpecification
         Anchors = [akLeft, akBottom]
         TabOrder = 1
+        ExplicitTop = 505
       end
     end
   end
@@ -910,12 +983,6 @@ object FormMain: TFormMain
       item
         Items.CaptionOptions = coAll
         Items = <
-          item
-            Action = actSave
-            Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' &F5'
-            ImageIndex = 0
-            ShortCut = 116
-          end
           item
             Action = actRollback
             Caption = #1054#1090#1084#1077#1085#1080#1090#1100' F&4'
