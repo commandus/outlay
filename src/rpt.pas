@@ -16,8 +16,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   formoutlay, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh,
   Vcl.StdCtrls, Vcl.ExtCtrls, EhLibVCL, GridsEh, DBAxisGridsEh, DBGridEh,
-  Vcl.ComCtrls,
-  dm, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery, Vcl.Grids, Vcl.ValEdit;
+  Vcl.ComCtrls, Vcl.Grids, Vcl.ValEdit,
+  dm, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery;
 
 type
   TFormReports = class(TFormOutlay)

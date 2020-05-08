@@ -1088,14 +1088,14 @@ object dmOutlay: TdmOutlay
     InsertSQL.Strings = (
       'insert into SPECIFICATION'
       
-        '  (DISCOUNT, LINENO, NOTES, PARTNAME, PRICE, PRICEID, QTY, REQUE' +
-        'STID, TAG, '
-      '   VAT)'
+        '  (DISCOUNT, ID, LINENO, NOTES, PARTNAME, PRICE, PRICEID, QTY, R' +
+        'EQUESTID, '
+      '   TAG, VAT, REBATE)'
       'values'
       
-        '  (:DISCOUNT, :LINENO, :NOTES, :PARTNAME, :PRICE, :PRICEID, :QTY' +
-        ', :REQUESTID, '
-      '   :TAG, :VAT)')
+        '  (:DISCOUNT, :ID, :LINENO, :NOTES, :PARTNAME, :PRICE, :PRICEID,' +
+        ' :QTY, '
+      '   :REQUESTID, :TAG, :VAT, :REBATE)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1111,19 +1111,21 @@ object dmOutlay: TdmOutlay
       '  TAG,'
       '  NOTES,'
       '  CREATED,'
-      '  MODIFIED'
+      '  MODIFIED,'
+      '  REBATE'
       'from SPECIFICATION '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
       
-        'select COST, CREATED, DISCOUNT, ID, LINENO, MODIFIED, NOTES, PAR' +
-        'TNAME, PRICE, PRICEID, QTY, REQUESTID, TAG, VAT from SPECIFICATI' +
-        'ON')
+        'select COST, DISCOUNT, ID, LINENO, NOTES, PARTNAME, PRICE, PRICE' +
+        'ID, QTY, REQUESTID, TAG, VAT, REBATE'
+      'from SPECIFICATION')
     ModifySQL.Strings = (
       'update SPECIFICATION'
       'set'
       '  DISCOUNT = :DISCOUNT,'
+      '  ID = :ID,'
       '  LINENO = :LINENO,'
       '  NOTES = :NOTES,'
       '  PARTNAME = :PARTNAME,'
@@ -1132,7 +1134,8 @@ object dmOutlay: TdmOutlay
       '  QTY = :QTY,'
       '  REQUESTID = :REQUESTID,'
       '  TAG = :TAG,'
-      '  VAT = :VAT'
+      '  VAT = :VAT,'
+      '  REBATE = :REBATE'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
@@ -1200,6 +1203,10 @@ object dmOutlay: TdmOutlay
       FieldName = 'TAG'
       Origin = '"SPECIFICATION"."TAG"'
       Size = 16
+    end
+    object IBSpecificationREBATE: TFloatField
+      FieldName = 'REBATE'
+      Origin = '"SPECIFICATION"."REBATE"'
     end
   end
   object dsSpecification: TDataSource
@@ -1576,6 +1583,8 @@ object dmOutlay: TdmOutlay
     Database = IBDatabase
     Transaction = IBTransaction
     AfterInsert = IBLSpecificationAfterInsert
+    AfterOpen = IBLSpecificationAfterOpen
+    AfterPost = IBLSpecificationAfterPost
     OnCalcFields = IBLSpecificationCalcFields
     BufferChunks = 1000
     CachedUpdates = False
@@ -1588,12 +1597,12 @@ object dmOutlay: TdmOutlay
       
         '  (ID, REQUESTID, LINENO, PARTNAME, QTY, PRICEID, PRICE, DISCOUN' +
         'T, VAT, '
-      '   TAG, NOTES)'
+      '   TAG, NOTES, REBATE)'
       'values'
       
         '  (:ID, :REQUESTID, :LINENO, :PARTNAME, :QTY, :PRICEID, :PRICE, ' +
         ':DISCOUNT, '
-      '   :VAT, :TAG, :NOTES)')
+      '   :VAT, :TAG, :NOTES, :REBATE)')
     RefreshSQL.Strings = (
       'Select '
       '  ID,'
@@ -1609,14 +1618,15 @@ object dmOutlay: TdmOutlay
       '  TAG,'
       '  NOTES,'
       '  CREATED,'
-      '  MODIFIED'
+      '  MODIFIED,'
+      '  REBATE'
       'from SPECIFICATION '
       'where'
       '  ID = :ID')
     SelectSQL.Strings = (
       
         'select  ID,REQUESTID,LINENO,PARTNAME,QTY,PRICEID,PRICE,DISCOUNT,' +
-        'VAT,COST,TAG,NOTES'
+        'VAT,COST,TAG,NOTES,REBATE'
       'from SPECIFICATION where REQUESTID = :ID')
     ModifySQL.Strings = (
       'update SPECIFICATION'
@@ -1631,7 +1641,8 @@ object dmOutlay: TdmOutlay
       '  DISCOUNT = :DISCOUNT,'
       '  VAT = :VAT,'
       '  TAG = :TAG,'
-      '  NOTES = :NOTES'
+      '  NOTES = :NOTES,'
+      '  REBATE = :REBATE'
       'where'
       '  ID = :OLD_ID')
     ParamCheck = True
@@ -1700,6 +1711,10 @@ object dmOutlay: TdmOutlay
       FieldName = 'NOTES'
       Origin = '"SPECIFICATION"."NOTES"'
       Size = 4096
+    end
+    object IBLSpecificationREBATE: TFloatField
+      FieldName = 'REBATE'
+      Origin = '"SPECIFICATION"."REBATE"'
     end
     object IBLSpecificationPRICEVAL: TStringField
       FieldKind = fkLookup
@@ -1912,6 +1927,7 @@ object dmOutlay: TdmOutlay
   end
   object dslSpecification: TDataSource
     DataSet = IBLSpecification
+    OnDataChange = dslSpecificationDataChange
     Left = 604
     Top = 248
   end

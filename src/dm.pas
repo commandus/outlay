@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, Data.FMTBcd, Data.DBXInterBase,
-  Data.SqlExpr, VCL.Themes, IniFiles,
+  Data.SqlExpr, VCL.Themes, Vcl.ValEdit, IniFiles,
   Vcl.Forms, EhLibIBX, DbUtilsEh, IBX.IBDatabase,
   IBX.IBCustomDataSet, IBX.IBQuery;
 
@@ -205,12 +205,17 @@ type
     IBLProjectDISCOUNT: TFloatField;
     IBLSpecificationPRICENDISCOUNT: TCurrencyField;
     IBLSpecificationCOSTNDISCOUNT: TCurrencyField;
+    IBLSpecificationREBATE: TFloatField;
+    IBSpecificationREBATE: TFloatField;
     procedure DataModuleCreate(Sender: TObject);
     procedure IBLRequestAfterInsert(DataSet: TDataSet);
     procedure IBLProjectAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationAfterInsert(DataSet: TDataSet);
     procedure IBLSpecificationCalcFields(DataSet: TDataSet);
     procedure IBLRequestCurrencyRateAfterInsert(DataSet: TDataSet);
+    procedure dslSpecificationDataChange(Sender: TObject; Field: TField);
+    procedure IBLSpecificationAfterPost(DataSet: TDataSet);
+    procedure IBLSpecificationAfterOpen(DataSet: TDataSet);
   private
     function getStyles: TStringList;
     function GetSelectedProjectName: String;
@@ -224,7 +229,9 @@ type
     function GetDefaultProjectStage(): String;
     function GetDefaultProjectVAT(): Int64;
     function GetSelectedRequestId(): LongWord;
+    function calcSums(): TStrings;
   public
+    requestSumList: TStrings;
     inifilename: String;
     style: String;
     styles: TStringList;
@@ -241,6 +248,8 @@ type
     function connectionString: AnsiString;
     function getCurrencyRateDefault(const curr: string): Double;
     function getCurrencyRate(const curr: string): Double;
+    procedure setRequestDiscount2All(const val: double);
+    procedure updateSums();
     class procedure ActivateDbControls(component: TComponent);
   end;
 
@@ -253,11 +262,18 @@ implementation
 
 {$R *.dfm}
 
+uses
+  DBGridEh, Generics.Collections;
+
 procedure TdmOutlay.DataModuleCreate(Sender: TObject);
 begin
   inifilename:= ChangeFileExt(Application.ExeName, '.ini');
   loadSettings();
   connect(IBDatabase);
+end;
+
+procedure TdmOutlay.dslSpecificationDataChange(Sender: TObject; Field: TField);
+begin
 end;
 
 {
@@ -353,62 +369,97 @@ begin
   end;
 end;
 
-function TdmOutlay.getCurrencyRate(const curr: string): Double;
+procedure TdmOutlay.IBLSpecificationAfterOpen(DataSet: TDataSet);
 begin
+  updateSums();
+end;
+
+procedure TdmOutlay.IBLSpecificationAfterPost(DataSet: TDataSet);
+begin
+  updateSums();
+end;
+
+procedure TdmOutlay.updateSums();
+var
+  sl: TStrings;
+begin
+  sl:= dm.dmOutlay.calcSums();
+  if requestSumList <> Nil then begin
+    requestSumList.Assign(sl);
+  end;
+  sl.Free;
+end;
+
+function TdmOutlay.getCurrencyRate(const curr: string): Double;
+var
+  bookmark: TBookmark;
+begin
+  bookmark:= IBLRequestCurrencyRate.GetBookmark;
+  IBLRequestCurrencyRate.DisableControls;
   IBLRequestCurrencyRate.First;
   while not IBLRequestCurrencyRate.Eof do
   begin
     if curr = IBLRequestCurrencyRate.FieldByName('CURRENCY').AsString  then begin
       Result:= IBLRequestCurrencyRate.FieldByName('VAL').AsCurrency;
+      IBLRequestCurrencyRate.EnableControls;
       Exit;
     end;
     IBLRequestCurrencyRate.Next;
   end;
+  IBLRequestCurrencyRate.GotoBookmark(bookmark);
+  IBLRequestCurrencyRate.EnableControls;
   Result:= getCurrencyRateDefault(curr);
 end;
 
 function TdmOutlay.getCurrencyRateDefault(const curr: string): Double;
+var
+  bookmark: TBookmark;
 begin
+  bookmark:= IBCurrency.GetBookmark;
+  IBCurrency.DisableControls;
   IBCurrency.First;
   while not IBCurrency.Eof do
   begin
     if curr = IBCurrency.FieldByName('CURRENCYSYMBOL').AsString  then begin
       Result:= IBCurrency.FieldByName('DEFAULTRATE').AsCurrency;
+      IBCurrency.EnableControls;
       Exit;
     end;
     IBCurrency.Next;
   end;
   Result:= 1.0;
+  IBCurrency.GotoBookmark(bookmark);
+  IBCurrency.EnableControls;
 end;
 
 procedure TdmOutlay.IBLSpecificationCalcFields(DataSet: TDataSet);
 var
-  p, price: Currency;
+  priceCurrency, price: Currency;
   c: String;
   rate: double;
-  qty, vol, weight, discount: double;
+  qty, vol, weight, rebate, discount, pricerebate: double;
 begin
-  p:= DataSet.FieldByName('PRICEPRICE').AsCurrency;
-  if (Abs(p) < 0.001) then Exit;
+  priceCurrency:= DataSet.FieldByName('PRICEPRICE').AsCurrency;
+  if (Abs(priceCurrency) < 0.001) then Exit;
   c:= DataSet.FieldByName('PRICECURRENCY').AsString;
-  rate:= getCurrencyRate(c);
-  price:= rate * p;
+  rebate:= Dataset.FieldByName('REBATE').AsCurrency;
   discount:= DataSet.FieldByName('DISCOUNT').AsCurrency;
-  DataSet.FieldByName('PRICENDISCOUNT').AsCurrency:= price + (price * discount / 100);
-  DataSet.FieldByName('PRICERUB').AsCurrency:= price;
-
   qty:= DataSet.FieldByName('QTY').AsCurrency;
-  if (Abs(qty) > 0.001) then begin
-    DataSet.FieldByName('COSTLIST').AsCurrency:= price * qty;
-    DataSet.FieldByName('COSTNDISCOUNT').AsCurrency:= qty * price + (price * discount / 100);
+  rate:= getCurrencyRate(c);
+  price:= rate * priceCurrency;
+  pricerebate:= price - (price * rebate / 100);
 
+  DataSet.FieldByName('PRICERUB').AsCurrency:= pricerebate;
+  DataSet.FieldByName('PRICENDISCOUNT').AsCurrency:= pricerebate + (pricerebate * discount / 100);
+
+  if (Abs(qty) > 0.0001) then begin
     vol:= DataSet.FieldByName('PARTVOL').AsFloat;
     weight:= DataSet.FieldByName('PARTWEIGHT').AsFloat;
 
+    DataSet.FieldByName('COSTLIST').AsCurrency:= pricerebate* qty;
+    DataSet.FieldByName('COSTNDISCOUNT').AsCurrency:= qty * (pricerebate + (pricerebate* discount / 100));
     DataSet.FieldByName('PARTVOLSUM').AsFloat:= vol * qty;
     DataSet.FieldByName('PARTWEIGHTSUM').AsFloat:= weight * qty;
-  end else begin
-    // DataSet.FieldByName('COSTLIST').Clear;
   end;
 end;
 
@@ -549,6 +600,127 @@ begin
     end;
   finally
   end;
+end;
+
+
+procedure TdmOutlay.setRequestDiscount2All(const val: double);
+var
+  bookmark: TBookmark;
+begin
+  bookmark:= IBLSpecification.GetBookmark;
+  IBLSpecification.DisableControls;
+  IBLSpecification.First;
+  while not IBLSpecification.Eof do
+  begin
+    IBLSpecification.Edit;
+    IBLSpecification.FieldByName('DISCOUNT').AsFloat:= val;
+    IBLSpecification.Post;
+    IBLSpecification.Next;
+  end;
+  IBLSpecification.GotoBookmark(bookmark);
+  IBLSpecification.EnableControls;
+end;
+
+function TdmOutlay.calcSums(): TStrings;
+var
+  i: Integer;
+  bookmark: TBookmark;
+  c, k: String;
+  rebate, price, priceRUR,
+  rebateRUR, discountRUR, rebateCurr, discountCurr: Currency;
+  rate, qty, vol, vat, weight, discount: double;
+  sumIn, sumRebate, sumDiscount: Currency;
+  sumVATIn, sumVATRebate, sumVATDiscount: Currency;
+  currCostIn, currCostRebate, currCostDiscount: TDictionary<String, Currency>;
+begin
+  bookmark:= IBLSpecification.GetBookmark;
+  IBLSpecification.DisableControls;
+  IBLSpecification.First;
+
+  sumIn:= 0.0;
+  sumRebate:= 0.0;
+  sumDiscount:= 0.0;
+  sumVATIn:= 0.0;
+  sumVATRebate:= 0.0;
+  sumVATDiscount:= 0.0;
+
+  currCostIn:= TDictionary<String, Currency>.Create();
+  currCostRebate:= TDictionary<String, Currency>.Create();
+  currCostDiscount:= TDictionary<String, Currency>.Create();
+
+  while not IBLSpecification.Eof do
+  begin
+    price:= IBLSpecification.FieldByName('PRICEPRICE').AsCurrency;
+    if (Abs(price) < 0.001) then Continue;
+    qty:= IBLSpecification.FieldByName('QTY').AsCurrency;
+    if (Abs(qty) < 0.0001) then Continue;
+
+    c:= IBLSpecification.FieldByName('PRICECURRENCY').AsString;
+    rate:= getCurrencyRate(c);
+    rebate:= IBLSpecification.FieldByName('REBATE').AsCurrency;
+    discount:= IBLSpecification.FieldByName('DISCOUNT').AsCurrency;
+    vat:= IBLSpecification.FieldByName('VAT').AsFloat;
+    vol:= IBLSpecification.FieldByName('PARTVOL').AsFloat;
+    weight:= IBLSpecification.FieldByName('PARTWEIGHT').AsFloat;
+
+    if not currCostIn.ContainsKey(c) then
+      currCostIn.Add(c, 0.0);
+    if not currCostRebate.ContainsKey(c) then
+      currCostRebate.Add(c, 0.0);
+    if not currCostDiscount.ContainsKey(c) then
+      currCostDiscount.Add(c, 0.0);
+
+    currCostIn[c]:= currCostIn[c] + price;
+    priceRUR:= rate * price;
+    sumIn:= sumIn + qty * priceRUR;
+    sumVATIn:= sumVATIn + (qty * priceRUR * vat / 100);
+    rebateRUR:= (priceRUR * rebate / 100);
+    sumRebate:= sumRebate + qty * (priceRUR - rebateRUR);
+    sumVATRebate:= sumVATRebate + qty * (priceRUR - rebateRUR) * vat / 100;
+    discountRUR:= (rebateRUR * discount / 100);
+    sumDiscount:= sumDiscount + qty * (rebateRUR + discountRUR);
+    sumVATDiscount:= sumVATDiscount + qty * (rebateRUR + discountRUR) * vat / 100;
+
+    rebateCurr:= (price * rebate / 100);
+    currCostRebate[c]:= currCostRebate[c] + price - rebateCurr;
+    discountCurr:= (rebateCurr * discount/ 100);
+    currCostDiscount[c]:= currCostDiscount[c] + discountCurr;
+
+    IBLSpecification.Next;
+  end;
+
+  IBLSpecification.GotoBookmark(bookmark);
+  IBLSpecification.EnableControls;
+
+  Result:= TStringList.Create;
+
+  for k in currCostIn.Keys do begin
+    Result.Values['Вход ' + k]:= CurrToStr(currCostIn.Items[k]);
+  end;
+  Result.Values['Итого ']:= CurrToStr(sumIn);
+
+  for k in currCostRebate.Keys do begin
+    Result.Values['С рибейтом ' + k]:= CurrToStr(currCostRebate.Items[k]);
+  end;
+  Result.Values['Итого ']:= CurrToStr(sumRebate);
+
+  for k in currCostDiscount.Keys do begin
+    Result.Values['С наценкой ' + k]:= CurrToStr(currCostDiscount.Items[k]);
+  end;
+  Result.Values['Продажа ']:= CurrToStr(sumDiscount);
+  Result.Values['Вал. прибыль ']:= CurrToStr(sumIn);
+
+  Result.Values['Вход. налог ']:= CurrToStr(sumVATIn);
+  Result.Values['С рибейтом налог ']:= CurrToStr(sumVATRebate);
+  Result.Values['Выход. налог ']:= CurrToStr(sumVATDiscount);
+
+  Result.Values['Вес ']:= FloatToStrF(weight, ffFixed, 2, 0);
+  Result.Values['Объем ']:= FloatToStrF(vol, ffFixed, 2, 0);
+
+  currCostIn.Free;
+  currCostRebate.Free;
+  currCostDiscount.Free;
+
 end;
 
 end.

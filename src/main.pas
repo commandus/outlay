@@ -5,11 +5,14 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB,
-  Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Menus, DBAxisGridsEh,
+  Vcl.Menus, DBAxisGridsEh,
   DBGridEh, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, EhLibVCL,
   GridsEh, Vcl.StdCtrls, VCL.Themes, EhLibIBX, DbUtilsEh, Vcl.ComCtrls,
   IBX.IBCustomDataSet, ShellApi,
-  dm, rpt, dict, settings, myorg, about;
+  dm, rpt, dict, settings, myorg, about, Vcl.PlatformDefaultStyleActnCtrls,
+  System.Actions, Vcl.ActnList, Vcl.ActnMan, Vcl.ToolWin, Vcl.ActnCtrls,
+  System.ImageList, Vcl.ImgList, Vcl.ValEdit, Vcl.Grids, Vcl.DBCtrls,
+  Vcl.ExtCtrls;
 
 type
   TFormMain = class(TForm)
@@ -37,8 +40,6 @@ type
     DBGridEhRequest: TDBGridEh;
     Splitter2: TSplitter;
     DBGridEhSpec: TDBGridEh;
-    MenuSave: TMenuItem;
-    MenuCancel: TMenuItem;
     MenuSep2: TMenuItem;
     ManuHelp: TMenuItem;
     MenuHelpAbout: TMenuItem;
@@ -46,8 +47,18 @@ type
     PanelRequest: TPanel;
     PanelRequestProp: TPanel;
     Splitter3: TSplitter;
-    DBGridEhRequestCurrency: TDBGridEh;
+    PageControlRightTop: TPageControl;
+    TabSheet5: TTabSheet;
     PanelCurrencyControl: TPanel;
+    DBGridEhRequestCurrency: TDBGridEh;
+    TabSheet6: TTabSheet;
+    ActionToolBar1: TActionToolBar;
+    ActionManagerMain: TActionManager;
+    ActionSetRequestDiscount: TAction;
+    actSave: TAction;
+    actRollback: TAction;
+    ImageList1: TImageList;
+    VLERequestSums: TValueListEditor;
     procedure ShowOptions();
     procedure ShowMyOrg();
     procedure ShowDict();
@@ -57,11 +68,13 @@ type
     procedure MenuOrgClick(Sender: TObject);
     procedure MenuDictClick(Sender: TObject);
     procedure RefreshData();
-    procedure MenuSaveClick(Sender: TObject);
-    procedure MenuCancelClick(Sender: TObject);
     procedure MenuReportClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuHelpUserGuideClick(Sender: TObject);
+    procedure ActionSetRequestDiscountExecute(Sender: TObject);
+    procedure actSaveExecute(Sender: TObject);
+    procedure actRollbackExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     procedure Rollback3();
     procedure Commit3();
@@ -77,20 +90,26 @@ implementation
 
 const URL_USER_GUIDE = 'https://docs.google.com/document/d/1ilBTF2z5BMg_kmHjyQnYWb5hFhUK5fvylxXYMa8Zv7I/edit?usp=sharing';
 
-procedure TFormMain.FormCreate(Sender: TObject);
+procedure TFormMain.FormActivate(Sender: TObject);
 begin
-  if not dm.dmOutlay.IBDatabase.Connected then begin
+  dm.dmOutlay.IBDatabase.Connected:= false;
+  try
+    if not dm.dmOutlay.IBDatabase.Connected then begin
+      dm.dmOutlay.IBDatabase.Connected:= true;
+    end;
+  except on E: Exception do
     ShowOptions();
   end;
   if dm.dmOutlay.IBDatabase.Connected then begin
+    dm.dmOutlay.ActivateDbControls(dm.dmOutlay);
     dm.dmOutlay.ActivateDbControls(Self);
     DbUtilsEh.SQLFilterMarker:= '/*Filter*/';
   end;
 end;
 
-procedure TFormMain.MenuCancelClick(Sender: TObject);
+procedure TFormMain.FormCreate(Sender: TObject);
 begin
-  Rollback3();
+  dm.dmOutlay.requestSumList:= VLERequestSums.Strings;
 end;
 
 procedure TFormMain.MenuDictClick(Sender: TObject);
@@ -132,11 +151,6 @@ begin
   if FormReports = Nil then
     FormReports:= TFormReports.Create(Self);
   FormReports.Show();
-end;
-
-procedure TFormMain.MenuSaveClick(Sender: TObject);
-begin
-  Commit3();
 end;
 
 procedure TFormMain.ShowOptions();
@@ -212,6 +226,21 @@ begin
     dm.dmOutlay.IBLRequest.Post;
   if dm.dmOutlay.IBLSpecification.Modified then
     dm.dmOutlay.IBLSpecification.Post;
+end;
+
+procedure TFormMain.ActionSetRequestDiscountExecute(Sender: TObject);
+begin
+  dm.dmOutlay.setRequestDiscount2All(dm.dmOutlay.IBLRequest.FieldByName('DISCOUNT').AsFloat);
+end;
+
+procedure TFormMain.actRollbackExecute(Sender: TObject);
+begin
+  Rollback3;
+end;
+
+procedure TFormMain.actSaveExecute(Sender: TObject);
+begin
+  Commit3;
 end;
 
 end.
