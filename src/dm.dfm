@@ -248,6 +248,7 @@ object dmOutlay: TdmOutlay
     UniDirectional = False
     GeneratorField.Field = 'ID'
     GeneratorField.Generator = 'GEN_PERSON_ID'
+    Active = True
     Left = 76
     Top = 64
     object IBPersonID: TLargeintField
@@ -614,6 +615,7 @@ object dmOutlay: TdmOutlay
       '  ORGNAME = :OLD_ORGNAME')
     ParamCheck = True
     UniDirectional = False
+    Active = True
     Left = 380
     Top = 64
     object IBOrgORGTYPE: TIBStringField

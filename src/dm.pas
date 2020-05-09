@@ -260,6 +260,7 @@ type
     hostAddress: String;
     userName: String;
     userPassword: String;
+    myorgname: String;
     function connect(ibDatabase: TIBDatabase): Boolean;
     class procedure loadLastStyle();
     procedure setStyle(const style: String);
@@ -547,6 +548,7 @@ begin
    styles:= getStyles();
    ini:= TIniFile.Create(inifilename);
    try
+    myorgname:= ini.ReadString('org', 'name', '');
     style:= ini.ReadString('ui', 'style', 'Windows10');
     dbName:= ini.ReadString('db', 'name', 'outlay');
     hostAddress:= ini.ReadString('db', 'host', '127.0.0.1');
@@ -563,6 +565,7 @@ var
 begin
    ini:= TIniFile.Create(inifilename);
    try
+    ini.WriteString('org', 'name', myorgname);
     ini.WriteString('ui', 'style', style);
     ini.WriteString('db', 'name', dbName);
     ini.WriteString('db', 'host', hostAddress);

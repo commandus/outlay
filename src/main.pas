@@ -18,48 +18,37 @@ type
   TFormMain = class(TForm)
     MainMenu: TMainMenu;
     MenuOptions: TMenuItem;
-    PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    TabSheet4: TTabSheet;
-    DBGridProjectList: TDBGridEh;
-    DBNavigatorRequest: TDBNavigator;
-    DBGridEh2: TDBGridEh;
-    DBNavigatorProjects: TDBNavigator;
-    DBGridEh8: TDBGridEh;
-    DBNavigator8: TDBNavigator;
     MenuSep1: TMenuItem;
     MenuExit: TMenuItem;
     MenuReport: TMenuItem;
     MenuOrg: TMenuItem;
     MenuDict: TMenuItem;
-    TabSheet3: TTabSheet;
-    DBGridEh1: TDBGridEh;
-    Splitter1: TSplitter;
-    PanelRight: TPanel;
-    DBGridEhRequest: TDBGridEh;
-    Splitter2: TSplitter;
-    DBGridEhSpec: TDBGridEh;
     MenuSep2: TMenuItem;
     ManuHelp: TMenuItem;
     MenuHelpAbout: TMenuItem;
     MenuHelpUserGuide: TMenuItem;
-    PanelRequest: TPanel;
-    PanelRequestProp: TPanel;
-    Splitter3: TSplitter;
-    PageControlRightTop: TPageControl;
-    TabSheet5: TTabSheet;
-    PanelCurrencyControl: TPanel;
-    DBGridEhRequestCurrency: TDBGridEh;
-    TabSheet6: TTabSheet;
-    ActionToolBar1: TActionToolBar;
     ActionManagerMain: TActionManager;
     ActionSetRequestDiscount: TAction;
     actSave: TAction;
     actRollback: TAction;
     ImageList1: TImageList;
-    VLERequestSums: TValueListEditor;
+    Splitter1: TSplitter;
+    DBGridEh1: TDBGridEh;
+    PanelRight: TPanel;
+    Splitter2: TSplitter;
+    PanelRequest: TPanel;
+    Splitter3: TSplitter;
+    DBGridEhRequest: TDBGridEh;
+    PanelRequestProp: TPanel;
+    PageControlRightTop: TPageControl;
+    TabSheet5: TTabSheet;
+    PanelCurrencyControl: TPanel;
+    DBGridEhRequestCurrency: TDBGridEh;
+    ActionToolBar1: TActionToolBar;
     DBGridEhPayment: TDBGridEh;
+    TabSheet6: TTabSheet;
+    VLERequestSums: TValueListEditor;
+    DBGridEhSpec: TDBGridEh;
     procedure ShowOptions();
     procedure ShowMyOrg();
     procedure ShowDict();
@@ -68,7 +57,6 @@ type
     procedure MenuExitClick(Sender: TObject);
     procedure MenuOrgClick(Sender: TObject);
     procedure MenuDictClick(Sender: TObject);
-    procedure RefreshData();
     procedure MenuReportClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuHelpUserGuideClick(Sender: TObject);
@@ -77,6 +65,9 @@ type
     procedure actRollbackExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
   private
+    dictDatasets: array of TIBDataset;
+    mainDatasets: array of TIBDataset;
+    procedure RefreshDicts();
     procedure Rollback3();
     procedure Commit3();
   public
@@ -111,6 +102,22 @@ end;
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   dm.dmOutlay.requestSumList:= VLERequestSums.Strings;
+  dictDatasets:= [dmOutlay.IBOrg,
+    dmOutlay.IBSaleType,
+    dmOutlay.IBStage,
+    dmOutlay.IBVAT,
+    dmOutlay.IBCurrency,
+    dmOutlay.IBPaymentState,
+    dmOutlay.IBPaymentType,
+    dmOutlay.IBPart
+  ];
+  mainDatasets:= [
+    dm.dmOutlay.IBLProject,
+    dm.dmOutlay.IBLRequest,
+    dm.dmOutlay.IBLSpecification,
+    dm.dmOutlay.IBLPayment,
+    dm.dmOutlay.IBLRequestCurrencyRate
+  ];
 end;
 
 procedure TFormMain.MenuDictClick(Sender: TObject);
@@ -173,35 +180,9 @@ begin
   FormMain.Hide();
   FormMyOrg:= TFormMyOrg.Create(Self);
   FormMyOrg.ShowModal();
-  FormMain.RefreshData();
+  FormMain.Refresh();
   FormMain.Show();
   FreeAndNil(FormMyOrg);
-end;
-
-procedure TFormMain.RefreshData();
-var
-  c: Integer;
-  p: boolean;
-begin
-  try
-    for c:= 0 to ComponentCount - 1 do begin
-      if (Components[c] is TDBGridEh) then with TDBGridEh(Components[c]) do begin
-        p:= DataSource = dmOutlay.dslProject;
-        if DataSource.DataSet.Active then begin
-          if p then begin
-            SaveVertPos('NAME');
-          end;
-          DataSource.DataSet.Close;
-        end;
-        DataSource.DataSet.Open();
-        if p then
-          RestoreVertPos('NAME');
-        // DataSource.DataSet.Refresh();
-        // Refresh();
-      end;
-    end;
-  finally
-  end;
 end;
 
 procedure TFormMain.ShowDict();
@@ -209,33 +190,54 @@ begin
   FormMain.Hide();
   FormDict:= TFormDict.Create(Self);
   FormDict.ShowModal();
-  FormMain.RefreshData();
+  FormMain.Refresh();
   FormMain.Show();
   FreeAndNil(FormDict);
 end;
 
-procedure TFormMain.Rollback3();
+procedure TFormMain.RefreshDicts();
+var
+  ds: TIBDataSet;
+  bookmark: TBookmark;
 begin
-  if dm.dmOutlay.IBLProject.Modified then
-    dm.dmOutlay.IBLProject.Cancel;
-  if dm.dmOutlay.IBLRequest.Modified then
-    dm.dmOutlay.IBLRequest.Cancel;
-  if dm.dmOutlay.IBLSpecification.Modified then
-    dm.dmOutlay.IBLSpecification.Cancel;
-  // dm.dmOutlay.IBDatabase.DefaultTransaction.Rollback;
-  // dm.dmOutlay.IBDatabase.DefaultTransaction.StartTransaction;
+  for ds in dictDatasets do begin
+    bookmark:= ds.GetBookmark;
+    ds.Close;
+    ds.Open;
+    ds.GotoBookmark(bookmark);
+  end;
+end;
+
+procedure TFormMain.Rollback3();
+var
+  ds: TIBDataSet;
+  bookmark: TBookmark;
+begin
+  RefreshDicts;
+  for ds in mainDatasets do begin
+  if ds.Modified then
+    ds.Cancel;
+  end;
+  bookmark:= ds.GetBookmark;
+  ds.Close;
+  ds.Open;
+  ds.GotoBookmark(bookmark);
 end;
 
 procedure TFormMain.Commit3();
+var
+  ds: TIBDataSet;
+  bookmark: TBookmark;
 begin
-  if dm.dmOutlay.IBLProject.Modified then
-    dm.dmOutlay.IBLProject.Post;
-  if dm.dmOutlay.IBLRequest.Modified then
-    dm.dmOutlay.IBLRequest.Post;
-  if dm.dmOutlay.IBLSpecification.Modified then
-    dm.dmOutlay.IBLSpecification.Post;
-  // dm.dmOutlay.IBDatabase.DefaultTransaction.Commit;
-  // dm.dmOutlay.IBDatabase.DefaultTransaction.StartTransaction;
+  RefreshDicts;
+  for ds in mainDatasets do begin
+  if ds.Modified then
+    ds.Post;
+  end;
+  bookmark:= ds.GetBookmark;
+  ds.Close;
+  ds.Open;
+  ds.GotoBookmark(bookmark);
 end;
 
 procedure TFormMain.ActionSetRequestDiscountExecute(Sender: TObject);

@@ -28,10 +28,6 @@
     object TabSheet13: TTabSheet
       Caption = #1055#1088#1072#1081#1089'-'#1083#1080#1089#1090
       ImageIndex = 14
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -277,10 +273,6 @@
     object TabSheet4: TTabSheet
       Caption = #1055#1088#1086#1077#1082#1090#1099
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -377,16 +369,12 @@
     end
     object TabSheet1: TTabSheet
       Caption = #1047#1072#1087#1088#1086#1089#1099
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
       object DBGridProjectList: TDBGridEh
         Left = 0
-        Top = -6
+        Top = 0
         Width = 616
         Height = 386
         Anchors = [akLeft, akTop, akRight, akBottom]
@@ -503,10 +491,6 @@
     object TabSheet2: TTabSheet
       Caption = #1057#1087#1077#1094#1080#1092#1080#1082#1072#1094#1080#1080
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -616,10 +600,6 @@
     object TabSheet10: TTabSheet
       Caption = #1055#1086#1089#1090#1072#1074#1097#1080#1082#1080
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -669,10 +649,6 @@
     object Организации: TTabSheet
       Caption = #1054#1088#1075#1072#1085#1080#1079#1072#1094#1080#1080
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -776,10 +752,6 @@
     object TabSheet5: TTabSheet
       Caption = #1057#1086#1090#1088#1091#1076#1085#1080#1082#1080
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -900,10 +872,6 @@
     object НДС: TTabSheet
       Caption = #1053#1044#1057
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -953,10 +921,6 @@
     object TabSheet6: TTabSheet
       Caption = #1058#1080#1087#1099' '#1086#1088#1075'.'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1005,10 +969,6 @@
     object TabSheet3: TTabSheet
       Caption = #1044#1086#1083#1078#1085#1086#1089#1090#1080
       ImageIndex = 7
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1058,10 +1018,6 @@
     object TabSheet7: TTabSheet
       Caption = #1045#1076'.'#1080#1079#1084'.'
       ImageIndex = 8
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1111,10 +1067,6 @@
     object TabSheet8: TTabSheet
       Caption = #1058#1080#1087' '#1087#1088#1086#1076#1072#1078
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1164,10 +1116,6 @@
     object TabSheet9: TTabSheet
       Caption = #1042#1072#1083'.'
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1224,10 +1172,6 @@
     object TabSheet11: TTabSheet
       Caption = #1050#1072#1090'.'
       ImageIndex = 12
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         616
         417)
@@ -1272,6 +1216,204 @@
         DataSource = dmOutlay.dsCategory
         Anchors = [akLeft, akBottom]
         TabOrder = 1
+      end
+    end
+    object TabSheetPaymentType: TTabSheet
+      Caption = #1058#1080#1087#1099' '#1087#1083#1072#1090'.'
+      ImageIndex = 15
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      DesignSize = (
+        616
+        417)
+      object DBGridEhPaymentType: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 616
+        Height = 386
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ColumnDefValues.Title.TitleButton = True
+        DataSource = dmOutlay.dsPaymentType
+        DynProps = <>
+        OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+        TabOrder = 0
+        Columns = <
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Caption = #1058#1080#1087' '#1087#1083#1072#1090#1077#1078#1072
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'CODE'
+            Footers = <>
+            Title.Caption = #1050#1086#1076
+            Width = 32
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+      object DBNavigator12: TDBNavigator
+        Left = 0
+        Top = 384
+        Width = 320
+        Height = 30
+        DataSource = dmOutlay.dsPaymentType
+        Anchors = [akLeft, akBottom]
+        TabOrder = 1
+      end
+    end
+    object TabSheetPaymentState: TTabSheet
+      Caption = #1057#1086#1089#1090'.'#1087#1083#1072#1090'.'
+      ImageIndex = 16
+      DesignSize = (
+        616
+        417)
+      object DBGridEh11: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 616
+        Height = 386
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ColumnDefValues.Title.TitleButton = True
+        DataSource = dmOutlay.dsPaymentState
+        DynProps = <>
+        OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+        TabOrder = 0
+        Columns = <
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'NAME'
+            Footers = <>
+            Title.Caption = #1057#1086#1089#1090#1086#1103#1085#1080#1077' '#1087#1083#1072#1090#1077#1078#1072
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'CODE'
+            Footers = <>
+            Title.Caption = #1050#1086#1076
+            Width = 32
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
+      end
+      object DBNavigator13: TDBNavigator
+        Left = 0
+        Top = 384
+        Width = 320
+        Height = 30
+        DataSource = dmOutlay.dsPaymentState
+        Anchors = [akLeft, akBottom]
+        TabOrder = 1
+      end
+    end
+    object TabSheetPayment: TTabSheet
+      Caption = #1055#1083#1072#1090'.'
+      ImageIndex = 17
+      DesignSize = (
+        616
+        417)
+      object DBNavigator14: TDBNavigator
+        Left = 0
+        Top = 384
+        Width = 320
+        Height = 30
+        DataSource = dmOutlay.dsPayment
+        Anchors = [akLeft, akBottom]
+        TabOrder = 0
+      end
+      object DBGridEh12: TDBGridEh
+        Left = 0
+        Top = 0
+        Width = 616
+        Height = 386
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ColumnDefValues.Title.TitleButton = True
+        DataSource = dmOutlay.dsPayment
+        DynProps = <>
+        OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghMultiSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghExtendVertLines]
+        TabOrder = 1
+        Columns = <
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'ID'
+            Footers = <>
+            Title.Caption = #8470
+            Width = 44
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'REQUESTID'
+            Footers = <>
+            Title.Caption = #1047#1072#1087#1088#1086#1089
+            Width = 48
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'PAYDAY'
+            Footers = <>
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'PSTATE'
+            Footers = <>
+            Title.Caption = #1057#1086#1089#1090#1086#1103#1085#1080#1077
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'PTYPE'
+            Footers = <>
+            Title.Caption = #1058#1080#1087
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'VAL'
+            Footers = <>
+            Title.Caption = #1057#1091#1084#1084#1072
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'DOCID'
+            Footers = <>
+            Title.Caption = #1055#1083#1072#1090#1077#1078#1085#1099#1081' '#1076#1086#1082#1091#1084#1077#1085#1090
+            Width = 100
+          end
+          item
+            CellButtons = <>
+            DynProps = <>
+            EditButtons = <>
+            FieldName = 'NOTES'
+            Footers = <>
+            Title.Caption = #1055#1088#1080#1084#1077#1095#1072#1085#1080#1077
+            Width = 100
+          end>
+        object RowDetailData: TRowDetailPanelControlEh
+        end
       end
     end
   end

@@ -8,6 +8,7 @@ uses
   Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Menus, DBAxisGridsEh,
   DBGridEh, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, EhLibVCL,
   GridsEh, Vcl.StdCtrls, VCL.Themes, EhLibIBX, DbUtilsEh, Vcl.ComCtrls,
+  IBX.IBCustomDataSet,
   dm, rpt, settings, myorg;
 
 type
@@ -58,9 +59,19 @@ type
     TabSheet13: TTabSheet;
     DBGridEh10: TDBGridEh;
     DBNavigator11: TDBNavigator;
+    TabSheetPaymentType: TTabSheet;
+    TabSheetPaymentState: TTabSheet;
+    TabSheetPayment: TTabSheet;
+    DBGridEhPaymentType: TDBGridEh;
+    DBNavigator12: TDBNavigator;
+    DBGridEh11: TDBGridEh;
+    DBNavigator13: TDBNavigator;
+    DBNavigator14: TDBNavigator;
+    DBGridEh12: TDBGridEh;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
+    procedure RefreshData();
   public
   end;
 
@@ -73,10 +84,27 @@ implementation
 
 uses main;
 
+procedure TFormDict.RefreshData();
+var
+  c: Integer;
+  p: boolean;
+begin
+  try
+    for c:= 0 to dm.dmOutlay.ComponentCount - 1 do begin
+      if dm.dmOutlay.Components[c] is TIBDataset then with TIBDataset(dm.dmOutlay.Components[c]) do begin
+        if Active then
+          Close;
+        Open();
+      end;
+    end;
+  finally
+  end;
+end;
+
 procedure TFormDict.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   // refresh
-  dmOutlay.IBTransaction.Commit();
+  RefreshData();
 end;
 
 procedure TFormDict.FormCreate(Sender: TObject);

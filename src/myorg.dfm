@@ -11,6 +11,8 @@ object FormMyOrg: TFormMyOrg
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
     624
@@ -33,7 +35,7 @@ object FormMyOrg: TFormMyOrg
   end
   object DBGridOrgList: TDBGridEh
     Left = 8
-    Top = 64
+    Top = 67
     Width = 425
     Height = 386
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -79,7 +81,7 @@ object FormMyOrg: TFormMyOrg
     EditButtons = <>
     KeyField = 'ORGNAME'
     ListField = 'ORGNAME'
-    ListSource = dsOrgList
+    ListSource = dsOrg
     TabOrder = 1
     Visible = True
   end
@@ -106,27 +108,8 @@ object FormMyOrg: TFormMyOrg
   end
   object dsMyOrg: TDataSource
     DataSet = IBMyOrg
-    Left = 456
-    Top = 264
-  end
-  object IBQueryOrg: TIBQuery
-    Database = dmOutlay.IBDatabase
-    Transaction = dmOutlay.IBTransaction
-    Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
-    ParamCheck = True
-    SQL.Strings = (
-      'select ORGNAME from ORG order by ORGNAME')
-    Left = 456
-    Top = 120
-    object IBQueryOrgORGNAME: TIBStringField
-      FieldName = 'ORGNAME'
-      Origin = '"ORG"."ORGNAME"'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-      Size = 1024
-    end
+    Left = 464
+    Top = 280
   end
   object IBOrg: TIBDataSet
     Database = dmOutlay.IBDatabase
@@ -139,9 +122,9 @@ object FormMyOrg: TFormMyOrg
       '  ORGNAME = :OLD_ORGNAME')
     InsertSQL.Strings = (
       'insert into ORG'
-      '  (ORGNAME)'
+      '  (ORGNAME, OWNER)'
       'values'
-      '  (:ORGNAME)')
+      '  (:ORGNAME, :OWNER)')
     RefreshSQL.Strings = (
       'Select '
       '  ORGTYPE,'
@@ -163,7 +146,8 @@ object FormMyOrg: TFormMyOrg
     ModifySQL.Strings = (
       'update ORG'
       'set'
-      '  ORGNAME = :ORGNAME'
+      '  ORGNAME = :ORGNAME,'
+      '  OWNER = :OWNER'
       'where'
       '  ORGNAME = :OLD_ORGNAME')
     ParamCheck = True
@@ -230,8 +214,8 @@ object FormMyOrg: TFormMyOrg
     ParamCheck = True
     UniDirectional = False
     Active = True
-    Left = 452
-    Top = 216
+    Left = 468
+    Top = 232
     object IBStringField2: TIBStringField
       FieldName = 'ORGNAME'
       Origin = '"ORG"."ORGNAME"'
@@ -239,10 +223,5 @@ object FormMyOrg: TFormMyOrg
       Required = True
       Size = 1024
     end
-  end
-  object dsOrgList: TDataSource
-    DataSet = IBQueryOrg
-    Left = 452
-    Top = 168
   end
 end

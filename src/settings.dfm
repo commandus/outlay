@@ -2,8 +2,8 @@ object FormSettings: TFormSettings
   Left = 0
   Top = 0
   Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 327
+  ClientWidth = 224
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,8 +13,8 @@ object FormSettings: TFormSettings
   OldCreateOrder = False
   OnCreate = FormCreate
   DesignSize = (
-    624
-    441)
+    224
+    327)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -55,7 +55,7 @@ object FormSettings: TFormSettings
   object cbStyle: TComboBox
     Left = 24
     Top = 36
-    Width = 145
+    Width = 171
     Height = 21
     TabOrder = 0
     Text = 'cbStyle'
@@ -63,7 +63,7 @@ object FormSettings: TFormSettings
   object EDbName: TEdit
     Left = 24
     Top = 82
-    Width = 145
+    Width = 171
     Height = 21
     Hint = #1051#1072#1090#1080#1085#1089#1082#1080#1077' '#1073#1091#1082#1074#1099
     TabOrder = 1
@@ -73,7 +73,7 @@ object FormSettings: TFormSettings
   object EHostAddress: TEdit
     Left = 24
     Top = 130
-    Width = 145
+    Width = 171
     Height = 21
     Hint = #1051#1072#1090#1080#1085#1089#1082#1080#1077' '#1073#1091#1082#1074#1099
     TabOrder = 2
@@ -83,7 +83,7 @@ object FormSettings: TFormSettings
   object EUser: TEdit
     Left = 24
     Top = 178
-    Width = 145
+    Width = 171
     Height = 21
     Hint = #1051#1072#1090#1080#1085#1089#1082#1080#1077' '#1073#1091#1082#1074#1099
     TabOrder = 3
@@ -91,8 +91,8 @@ object FormSettings: TFormSettings
     TextHint = #1080#1084#1103' '#1073#1072#1079#1099' '#1076#1072#1085#1085#1099#1093
   end
   object BOK: TButton
-    Left = 520
-    Top = 392
+    Left = 120
+    Top = 278
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -100,10 +100,12 @@ object FormSettings: TFormSettings
     Default = True
     TabOrder = 5
     OnClick = BOKClick
+    ExplicitLeft = 520
+    ExplicitTop = 392
   end
   object BCancel: TButton
-    Left = 424
-    Top = 392
+    Left = 24
+    Top = 278
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -111,11 +113,13 @@ object FormSettings: TFormSettings
     Caption = '&'#1054#1090#1084#1077#1085#1072
     TabOrder = 6
     OnClick = BCancelClick
+    ExplicitLeft = 424
+    ExplicitTop = 392
   end
   object EPassword: TEdit
     Left = 24
     Top = 226
-    Width = 145
+    Width = 171
     Height = 21
     Hint = #1051#1072#1090#1080#1085#1089#1082#1080#1077' '#1073#1091#1082#1074#1099
     PasswordChar = '*'

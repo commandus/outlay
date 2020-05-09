@@ -19,26 +19,25 @@ type
     DBCBEhMyOrg: TDBLookupComboboxEh;
     DBGridOrgList: TDBGridEh;
     dsMyOrg: TDataSource;
-    IBQueryOrg: TIBQuery;
     BSetOwner: TButton;
     BSave: TButton;
     Label1: TLabel;
     Label2: TLabel;
-    IBQueryOrgORGNAME: TIBStringField;
     IBOrg: TIBDataSet;
     IBOrgORGNAME: TIBStringField;
     dsOrg: TDataSource;
     IBMyOrg: TIBDataSet;
     IBStringField2: TIBStringField;
     IBOrgOWNER: TIBStringField;
-    dsOrgList: TDataSource;
     procedure BSetOwnerClick(Sender: TObject);
     procedure BSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     procedure SetOrgOwner(const g: TDBGridEh; const orgName: String);
+    procedure SelectMyOrg();
   public
-    { Public declarations }
   end;
 
 var
@@ -62,17 +61,52 @@ begin
       g.DataSource.DataSet.DisableControls;
       for i:= 0 to g.SelectedRows.Count - 1 do begin
         g.DataSource.DataSet.GotoBookmark(g.SelectedRows.Items[i]);
+        g.DataSource.DataSet.Edit;
         g.DataSource.DataSet.Fields[1].AsString:= orgName;
+        g.DataSource.DataSet.Post;
       end;
     finally
       g.DataSource.DataSet.EnableControls;
     end;
+  end else begin
+    g.DataSource.DataSet.Edit;
+    g.DataSource.DataSet.Fields[1].AsString:= orgName;
+    g.DataSource.DataSet.Post;
+  end;
+end;
+
+procedure TFormMyOrg.SelectMyOrg();
+begin
+  if dm.dmOutlay.myorgname.Length > 0 then
+  begin
+    IBMyOrg.DisableControls;
+    IBMyOrg.First;
+    while not IBMyOrg.Eof do
+    begin
+      if IBMyOrg.FieldByName('ORGNAME').AsString = dm.dmOutlay.myorgname then
+        Break;
+      IBMyOrg.Next;
+    end;
+    IBMyOrg.EnableControls;
   end;
 end;
 
 procedure TFormMyOrg.BSetOwnerClick(Sender: TObject);
 begin
   SetOrgOwner(DBGridOrgList, DBCBEhMyOrg.Text);
+end;
+
+procedure TFormMyOrg.FormActivate(Sender: TObject);
+begin
+  SelectMyOrg();
+end;
+
+procedure TFormMyOrg.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  dm.dmOutlay.myorgname:= IBMyOrg.FieldByName('ORGNAME').AsString;
+  dm.dmOutlay.saveSettings();
+  IBMyOrg.Close;
+  IBOrg.Close;
 end;
 
 procedure TFormMyOrg.FormCreate(Sender: TObject);
