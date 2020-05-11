@@ -20,6 +20,13 @@ uses
   dm, Data.DB, IBX.IBCustomDataSet, IBX.IBQuery;
 
 type
+  TReportType = (
+    rptPDF = 0,
+    rptXLS = 1,
+    rptXLSX = 2,
+    rptRTF = 3
+  );
+
   TFormReports = class(TFormOutlay)
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
@@ -39,21 +46,30 @@ type
     IBParametersNAME: TIBStringField;
     IBParametersREPORT: TIBStringField;
     IBParametersVAL: TIBStringField;
+    ButtonXLS: TButton;
+    ButtonXLSX: TButton;
+    ButtonRTF: TButton;
     procedure BReportExecClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IBQueryReportsAfterScroll(DataSet: TDataSet);
+    procedure ButtonXLSXClick(Sender: TObject);
+    procedure ButtonXLSClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ButtonRTFClick(Sender: TObject);
   private
     paramList: TStringList;
-    procedure doReport();
+    procedure doReport(reportType: TReportType);
     procedure loadParameters();
     procedure saveParameters();
-    function reportPDF(): AnsiString;
+    function report2File(reportType: TReportType): AnsiString;
     class function ExtractFr3(const fr3: String): TStringList;
   public
     { Public declarations }
     reportFileName: AnsiString;
     reportName: AnsiString;
   end;
+
 
 var
   FormReports: TFormReports;
@@ -123,14 +139,31 @@ end;
 
 procedure TFormReports.BReportExecClick(Sender: TObject);
 begin
-  doReport();
+  doReport(rptPDF);
 end;
 
-function TFormReports.reportPdf(): AnsiString;
+procedure TFormReports.ButtonRTFClick(Sender: TObject);
+begin
+  doReport(rptRTF);
+end;
+
+procedure TFormReports.ButtonXLSClick(Sender: TObject);
+begin
+  doReport(rptXLS);
+end;
+
+procedure TFormReports.ButtonXLSXClick(Sender: TObject);
+begin
+  doReport(rptXLSX);
+end;
+
+
+function TFormReports.report2File(reportType: TReportType): AnsiString;
 var
   k, t, v, paramstr: String;
   params: AnsiString;
   i: Integer;
+  ibecFmt: AnsiString;
 begin
   reportName:= IBQueryReports.FieldByName('NAME').AsString;
   params:= '';
@@ -145,14 +178,31 @@ begin
     params:= params+ 'Params[''' + k + '''] = ' + v + ';'#13#10;
   end;
 
-  reportFileName:= reportName + '.pdf';
+  case reportType of
+    rptXLS: begin
+      reportFileName:= reportName + '.xls';
+      ibecFmt:= '__erXLS';
+    end;
+    rptXLSX: begin
+      reportFileName:= reportName + '.xlsx';
+      ibecFmt:= '__erXML_XLS';
+    end;
+    rptRTF: begin
+      reportFileName:= reportName + '.rtf';
+      ibecFmt:= '__erRTF';
+    end
+    else begin
+      reportFileName:= reportName + '.pdf';
+      ibecFmt:= '__erPDF';
+    end;
+  end;
   Result:= 'execute ibeblock as begin'#13#10 +
   params +
   ' SELECT SOURCE FROM fastreport where name = ''' + reportName + ''''#13#10 +
   ' into :RepSrc;'#13#10 +
   ' Report = ibec_CreateReport(RepSrc, Params, null);'#13#10 +
   ' Res = ibec_ExportReport(Report, ''' + reportFileName +
-  ''', __erPDF, '''');'#13#10 +
+  ''', ' + ibecFmt + ', '''');'#13#10 +
   'end'#13#10;
   // FormReports.MemoErrors.Lines.Add(Result);
 end;
@@ -161,8 +211,7 @@ end;
 PropData Parameters Name="stage" DataType="ftString" Expression="[paramstage1]"
 0A506172616D657465727301010C3C000000204E616D653D227374616765222044617461547970653D226674537472696E67222045787072657373696F6E3D225B706172616D7374616765315D220000
 }
-
-procedure TFormReports.doReport();
+procedure TFormReports.doReport(reportType: TReportType);
 var
   Hndl: THandle;
   ESP: TExecuteScriptProc;
@@ -187,8 +236,12 @@ begin
       ESP:= GetProcAddress(Hndl, PAnsiChar('ExecScriptText'));
       if @ESP <> nil then
       begin
-        script:= reportPDF();
-        ESP(PAnsiChar(script), @HandleError, @BeforeExec, @AfterExec);
+        try
+          script:= report2File(reportType);
+          ESP(PAnsiChar(script), @HandleError, @BeforeExec, @AfterExec);
+        except on E: Exception do
+          CEH('Ошибка генерации отчета. Возможно, не установлен Excel.');
+        end;
       end else begin
         CEH('В динамически загружаемой библиотеке IBEScript нет ExecScriptText()');
       end;
@@ -197,6 +250,17 @@ begin
     if Hndl > HINSTANCE_ERROR then
       FreeLibrary(Hndl);
   end;
+end;
+
+procedure TFormReports.FormActivate(Sender: TObject);
+begin
+  dm.dmOutlay.ActivateDbControls(Self);
+end;
+
+procedure TFormReports.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  IBParameters.Close;
+  IBQueryReports.Close;
 end;
 
 procedure TFormReports.FormCreate(Sender: TObject);

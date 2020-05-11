@@ -11,6 +11,8 @@ object FormReports: TFormReports
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -109,7 +111,7 @@ object FormReports: TFormReports
           Width = 75
           Height = 25
           Anchors = [akRight, akBottom]
-          Caption = '&'#1042#1099#1087#1086#1083#1085#1080#1090#1100
+          Caption = '&PDF'
           Default = True
           TabOrder = 2
           OnClick = BReportExecClick
@@ -123,13 +125,43 @@ object FormReports: TFormReports
           ScrollBars = ssVertical
           TabOrder = 0
         end
+        object ButtonXLS: TButton
+          Left = 287
+          Top = 379
+          Width = 75
+          Height = 25
+          Anchors = [akRight, akBottom]
+          Caption = '&XLS'
+          TabOrder = 4
+          OnClick = ButtonXLSClick
+        end
+        object ButtonXLSX: TButton
+          Left = 206
+          Top = 379
+          Width = 75
+          Height = 25
+          Anchors = [akRight, akBottom]
+          Caption = '&XLSX'
+          TabOrder = 5
+          OnClick = ButtonXLSXClick
+        end
+        object ButtonRTF: TButton
+          Left = 125
+          Top = 379
+          Width = 75
+          Height = 25
+          Anchors = [akRight, akBottom]
+          Caption = '&RTF'
+          TabOrder = 6
+          OnClick = ButtonRTFClick
+        end
       end
     end
   end
   object dsReports: TDataSource
     DataSet = IBQueryReports
-    Left = 496
-    Top = 352
+    Left = 504
+    Top = 296
   end
   object IBQueryReports: TIBQuery
     Database = dmOutlay.IBDatabase
@@ -141,8 +173,8 @@ object FormReports: TFormReports
     ParamCheck = True
     SQL.Strings = (
       'select NAME, SOURCE from FASTREPORT order by NAME')
-    Left = 496
-    Top = 292
+    Left = 504
+    Top = 236
     object IBQueryReportsNAME: TIBStringField
       FieldName = 'NAME'
       Origin = '"FASTREPORT"."NAME"'
@@ -193,8 +225,8 @@ object FormReports: TFormReports
     ParamCheck = True
     UniDirectional = False
     Active = True
-    Left = 392
-    Top = 288
+    Left = 424
+    Top = 240
     object IBParametersNAME: TIBStringField
       FieldName = 'NAME'
       Origin = '"PARAMVALUE"."NAME"'
